@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520">
+<rect width="100%" height="100%" fill="#FCFCFD"/>
+<text x="32" y="42" font-family="Segoe UI, Arial" font-size="24" font-weight="700" fill="#1F2430">Healthcare Analytics: monthly revenue</text>
+<line x1="72" y1="86.0" x2="868" y2="86.0" stroke="#E6E8F0" stroke-width="1"/>
+<line x1="72" y1="176.5" x2="868" y2="176.5" stroke="#E6E8F0" stroke-width="1"/>
+<line x1="72" y1="267.0" x2="868" y2="267.0" stroke="#E6E8F0" stroke-width="1"/>
+<line x1="72" y1="357.5" x2="868" y2="357.5" stroke="#E6E8F0" stroke-width="1"/>
+<line x1="72" y1="448.0" x2="868" y2="448.0" stroke="#E6E8F0" stroke-width="1"/>
+<polyline points="72.0,252.1 118.8,308.7 165.6,361.1 212.5,87.2 259.3,158.8 306.1,372.6 352.9,191.8 399.8,448.0 446.6,86.0 493.4,300.6 540.2,124.7 587.1,210.8 633.9,220.3 680.7,339.4 727.5,240.6 774.4,253.3 821.2,92.4 868.0,274.8" fill="none" stroke="#386411" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="633.9" cy="220.3" r="5" fill="#FCFCFD" stroke="#386411" stroke-width="3"/>
+<circle cx="680.7" cy="339.4" r="5" fill="#FCFCFD" stroke="#386411" stroke-width="3"/>
+<circle cx="727.5" cy="240.6" r="5" fill="#FCFCFD" stroke="#386411" stroke-width="3"/>
+<circle cx="774.4" cy="253.3" r="5" fill="#FCFCFD" stroke="#386411" stroke-width="3"/>
+<circle cx="821.2" cy="92.4" r="5" fill="#FCFCFD" stroke="#386411" stroke-width="3"/>
+<circle cx="868.0" cy="274.8" r="5" fill="#FCFCFD" stroke="#386411" stroke-width="3"/>
+<text x="72.0" y="488" text-anchor="middle" font-family="Segoe UI, Arial" font-size="12" fill="#6F768A">Jul 2024</text>
+<text x="165.6" y="488" text-anchor="middle" font-family="Segoe UI, Arial" font-size="12" fill="#6F768A">Sep 2024</text>
+<text x="259.3" y="488" text-anchor="middle" font-family="Segoe UI, Arial" font-size="12" fill="#6F768A">Nov 2024</text>
+<text x="352.9" y="488" text-anchor="middle" font-family="Segoe UI, Arial" font-size="12" fill="#6F768A">Jan 2025</text>
+<text x="446.6" y="488" text-anchor="middle" font-family="Segoe UI, Arial" font-size="12" fill="#6F768A">Mar 2025</text>
+<text x="540.2" y="488" text-anchor="middle" font-family="Segoe UI, Arial" font-size="12" fill="#6F768A">May 2025</text>
+<text x="633.9" y="488" text-anchor="middle" font-family="Segoe UI, Arial" font-size="12" fill="#6F768A">Jul 2025</text>
+<text x="727.5" y="488" text-anchor="middle" font-family="Segoe UI, Arial" font-size="12" fill="#6F768A">Sep 2025</text>
+<text x="821.2" y="488" text-anchor="middle" font-family="Segoe UI, Arial" font-size="12" fill="#6F768A">Nov 2025</text>
+</svg>

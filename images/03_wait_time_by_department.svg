@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520">
+<rect width="100%" height="100%" fill="#FCFCFD"/>
+<text x="32" y="42" font-family="Segoe UI, Arial" font-size="24" font-weight="700" fill="#1F2430">Average wait by department</text>
+<text x="32" y="106.6" font-family="Segoe UI, Arial" font-size="14" fill="#1F2430">Oncology</text>
+<rect x="190" y="80" width="590" height="38" rx="4" fill="#386411" opacity="0.82"/>
+<text x="790" y="105.8" font-family="Consolas, monospace" font-size="13" fill="#464C55">40.7</text>
+<text x="32" y="154.6" font-family="Segoe UI, Arial" font-size="14" fill="#1F2430">ICU</text>
+<rect x="190" y="128" width="584" height="38" rx="4" fill="#386411" opacity="0.82"/>
+<text x="784" y="153.8" font-family="Consolas, monospace" font-size="13" fill="#464C55">40.3</text>
+<text x="32" y="202.6" font-family="Segoe UI, Arial" font-size="14" fill="#1F2430">Maternity</text>
+<rect x="190" y="176" width="583" height="38" rx="4" fill="#386411" opacity="0.82"/>
+<text x="783" y="201.8" font-family="Consolas, monospace" font-size="13" fill="#464C55">40.3</text>
+<text x="32" y="250.6" font-family="Segoe UI, Arial" font-size="14" fill="#1F2430">Orthopedics</text>
+<rect x="190" y="224" width="582" height="38" rx="4" fill="#386411" opacity="0.82"/>
+<text x="782" y="249.8" font-family="Consolas, monospace" font-size="13" fill="#464C55">40.2</text>
+<text x="32" y="298.6" font-family="Segoe UI, Arial" font-size="14" fill="#1F2430">Neurology</text>
+<rect x="190" y="272" width="582" height="38" rx="4" fill="#386411" opacity="0.82"/>
+<text x="782" y="297.8" font-family="Consolas, monospace" font-size="13" fill="#464C55">40.2</text>
+<text x="32" y="346.6" font-family="Segoe UI, Arial" font-size="14" fill="#1F2430">General Medicine</text>
+<rect x="190" y="320" width="575" height="38" rx="4" fill="#386411" opacity="0.82"/>
+<text x="775" y="345.8" font-family="Consolas, monospace" font-size="13" fill="#464C55">39.8</text>
+<text x="32" y="394.6" font-family="Segoe UI, Arial" font-size="14" fill="#1F2430">Radiology</text>
+<rect x="190" y="368" width="572" height="38" rx="4" fill="#386411" opacity="0.82"/>
+<text x="772" y="393.8" font-family="Consolas, monospace" font-size="13" fill="#464C55">39.5</text>
+<text x="32" y="442.6" font-family="Segoe UI, Arial" font-size="14" fill="#1F2430">Pediatrics</text>
+<rect x="190" y="416" width="571" height="38" rx="4" fill="#386411" opacity="0.82"/>
+<text x="771" y="441.8" font-family="Consolas, monospace" font-size="13" fill="#464C55">39.5</text>
+</svg>

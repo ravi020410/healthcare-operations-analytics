@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Healthcare Analytics Dashboard</title>
+  <style>
+    :root { --accent: #386411; --ink: #1F2430; --muted: #6F768A; --line: #E2E5EA; --bg: #F6F7FA; }
+    body { margin: 0; font-family: Segoe UI, Arial, sans-serif; background: var(--bg); color: var(--ink); }
+    header { padding: 28px 36px; background: #fff; border-bottom: 1px solid var(--line); }
+    h1 { margin: 0 0 8px; font-size: clamp(28px, 4vw, 44px); letter-spacing: 0; }
+    nav { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+    nav a { color: var(--accent); text-decoration: none; font-weight: 600; border: 1px solid var(--line); padding: 8px 10px; border-radius: 6px; background: #fff; }
+    main { padding: 28px 36px 48px; max-width: 1280px; margin: auto; }
+    .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; }
+    .metric { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 16px; }
+    .metric span { display: block; color: var(--muted); font-size: 13px; }
+    .metric strong { display: block; margin-top: 8px; color: var(--accent); font-size: 25px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 18px; margin-top: 24px; }
+    figure { margin: 0; background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 12px; }
+    figure img { width: 100%; height: auto; display: block; }
+    figcaption { color: var(--muted); font-size: 13px; margin-top: 8px; }
+    section { margin-top: 28px; background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 18px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Healthcare Analytics Dashboard</h1>
+    <p>Source-backed local dashboard generated from cleaned synthetic enterprise data.</p>
+    <nav><a href="#executive-overview">Executive Overview</a><a href="#admissions">Admissions</a><a href="#patient-analytics">Patient Analytics</a><a href="#doctor-analytics">Doctor Analytics</a><a href="#department-analytics">Department Analytics</a><a href="#financial-analytics">Financial Analytics</a></nav>
+  </header>
+  <main>
+    <div class="metrics"><article class="metric"><span>Average Length of Stay</span><strong>4.0</strong></article>
+<article class="metric"><span>Readmission Rate</span><strong>10.7%</strong></article>
+<article class="metric"><span>Bed Occupancy Rate</span><strong>14.2%</strong></article>
+<article class="metric"><span>Patient Wait Time</span><strong>39.7</strong></article>
+<article class="metric"><span>Doctor Utilization</span><strong>38.3%</strong></article>
+<article class="metric"><span>Revenue per Department</span><strong>$17.8M</strong></article>
+<article class="metric"><span>Cost per Patient</span><strong>6,720.2</strong></article>
+<article class="metric"><span>Patient Satisfaction Score</span><strong>81.9</strong></article></div>
+    <div class="grid"><figure><img src="../visuals/01_monthly_trend.svg" alt="visuals/01_monthly_trend.svg"><figcaption>01 Monthly Trend</figcaption></figure>
+<figure><img src="../visuals/02_department_revenue.svg" alt="visuals/02_department_revenue.svg"><figcaption>02 Department Revenue</figcaption></figure>
+<figure><img src="../visuals/03_wait_time_by_department.svg" alt="visuals/03_wait_time_by_department.svg"><figcaption>03 Wait Time By Department</figcaption></figure>
+<figure><img src="../visuals/04_readmission_by_department.svg" alt="visuals/04_readmission_by_department.svg"><figcaption>04 Readmission By Department</figcaption></figure>
+<figure><img src="../visuals/05_average_length_of_stay.svg" alt="visuals/05_average_length_of_stay.svg"><figcaption>05 Average Length Of Stay</figcaption></figure>
+<figure><img src="../visuals/06_readmission_rate.svg" alt="visuals/06_readmission_rate.svg"><figcaption>06 Readmission Rate</figcaption></figure></div>
+    <section><h2>Executive Overview</h2><p>Interactive Power BI build spec and local chart assets are mapped to this dashboard page.</p></section>
+<section><h2>Admissions</h2><p>Interactive Power BI build spec and local chart assets are mapped to this dashboard page.</p></section>
+<section><h2>Patient Analytics</h2><p>Interactive Power BI build spec and local chart assets are mapped to this dashboard page.</p></section>
+<section><h2>Doctor Analytics</h2><p>Interactive Power BI build spec and local chart assets are mapped to this dashboard page.</p></section>
+<section><h2>Department Analytics</h2><p>Interactive Power BI build spec and local chart assets are mapped to this dashboard page.</p></section>
+<section><h2>Financial Analytics</h2><p>Interactive Power BI build spec and local chart assets are mapped to this dashboard page.</p></section>
+    <section>
+      <h2>Sources and methodology</h2>
+      <p>Metrics reconcile to `data/cleaned` CSV files. SQL patterns, notebook analysis, and metric definitions are included in this repository.</p>
+    </section>
+  </main>
+</body>
+</html>

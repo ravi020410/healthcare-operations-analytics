@@ -1,0 +1,13 @@
+department_id,department,service_line
+1,Emergency,Acute
+2,Cardiology,Specialty
+3,Oncology,Specialty
+4,Orthopedics,Surgical
+5,Neurology,Specialty
+6,Pediatrics,Primary
+7,ICU,Acute
+8,Surgery,Surgical
+9,Radiology,Diagnostic
+10,Maternity,Primary
+11,General Medicine,Primary
+12,Rehabilitation,Recovery

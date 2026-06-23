@@ -1,0 +1,14 @@
+# Exclude heavy reports/dashboards from languages statistics
+reports/*.html linguist-generated=true
+reports/**/*.html linguist-generated=true
+dashboards/*.html linguist-generated=true
+visuals/*.svg linguist-generated=true
+
+# Force SQL files to be detected as primary coding assets
+*.sql linguist-detectable=true
+sql/*.sql linguist-detectable=true
+sql/**/*.sql linguist-detectable=true
+
+# Detect Jupyter Notebooks as primary analytics assets
+*.ipynb linguist-detectable=true
+notebooks/*.ipynb linguist-detectable=true

@@ -1,0 +1,13 @@
+{
+  "name": "Healthcare Analytics Theme",
+  "dataColors": [
+    "#386411",
+    "#B8A037",
+    "#71B436",
+    "#BD569B",
+    "#7A828F"
+  ],
+  "background": "#FCFCFD",
+  "foreground": "#1F2430",
+  "tableAccent": "#386411"
+}

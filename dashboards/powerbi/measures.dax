@@ -1,0 +1,10 @@
+AverageLengthofStay = -- See docs/metric_definitions.md for calculation logic
+ReadmissionRate = -- See docs/metric_definitions.md for calculation logic
+BedOccupancyRate = -- See docs/metric_definitions.md for calculation logic
+PatientWaitTime = -- See docs/metric_definitions.md for calculation logic
+DoctorUtilization = -- See docs/metric_definitions.md for calculation logic
+RevenueperDepartment = -- See docs/metric_definitions.md for calculation logic
+CostperPatient = -- See docs/metric_definitions.md for calculation logic
+PatientSatisfactionScore = -- See docs/metric_definitions.md for calculation logic
+EmergencyAdmissionRate = -- See docs/metric_definitions.md for calculation logic
+DischargeEfficiency = -- See docs/metric_definitions.md for calculation logic
