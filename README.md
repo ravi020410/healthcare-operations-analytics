@@ -1,119 +1,177 @@
-# Healthcare Operations Analytics & Patient Flow Optimization
+# Healthcare Operations Analytics Portfolio Project
 
-[![SQL](https://img.shields.io/badge/Database-PostgreSQL%20%7C%20Postgres-blue?logo=postgresql&logoColor=white)](https://github.com/ravi020410/healthcare-operations-analytics/tree/main/sql)
-[![Python](https://img.shields.io/badge/Language-Python%203.11-darkgreen?logo=python&logoColor=white)](https://github.com/ravi020410/healthcare-operations-analytics/tree/main/notebooks)
-[![Power BI](https://img.shields.io/badge/BI-Power%20BI-yellow?logo=powerbi&logoColor=white)](https://github.com/ravi020410/healthcare-operations-analytics/tree/main/dashboards)
+[![SQL](https://img.shields.io/badge/SQL-PostgreSQL-blue?style=flat&logo=postgresql)](https://github.com/ravi020410/healthcare-operations-analytics/tree/main/sql)
+[![Python](https://img.shields.io/badge/Python-pandas%20%7C%20numpy%20%7C%20scikit--learn-blue?style=flat&logo=python)](https://github.com/ravi020410/healthcare-operations-analytics/tree/main/notebooks)
+[![BI](https://img.shields.io/badge/BI-Power%20BI-yellow?style=flat)](https://github.com/ravi020410/healthcare-operations-analytics/tree/main/dashboards)
 
-An end-to-end hospital operations and financial analytics project. This project implements a fully normalized analytical PostgreSQL database, automated Python ETL notebooks, patient cohort modeling, and billing audits to bridge patient admission records, staff capacities, and treatment costs into actionable executive clinical strategies.
+**Author:** Ravikant Yadav, Lead Data Analyst  
+**Case Study:** Clinical Operations Optimization, Financial Modeling, and Readmission Risk Machine Learning  
 
 ---
 
-## 📂 Project Architecture & Repository Structure
+## 1. Project Overview & Business Problem
 
-The data flow starts from raw clinical transaction CSV logs, runs through Python quality validation, aggregates doctor and patient metrics in a PostgreSQL data warehouse, and concludes with dynamic visualization and statistical modeling.
+In hospital network management, operational bottlenecks (long wait times, capacity shortages) directly reduce patient care quality while causing financial leaks (excessive readmissions, unrecovered billing balances). 
 
-```text
-├── data/
-│   ├── raw/             # Messiah, uncleaned clinical source-like CSV files
-│   └── cleaned/         # Cleaned, structured, and validated CSV files
-├── sql/
-│   ├── 01_schema.sql                      # DDL defining analytics schema
-│   ├── 02_load_csv.sql                    # CSV bulk copy stubs
-│   ├── 03_kpi_queries.sql                 # Baseline checks
-│   ├── 04_quality_checks.sql              # Duplicate and integrity auditing
-│   ├── 05_analysis_queries.sql            # Simple operational growth queries
-│   └── 20_business_analysis_queries.sql   # 22 Advanced PostgreSQL Business Queries (LOS, Occupancy, Readmissions)
-├── notebooks/
-│   ├── 01_eda.ipynb                       # Patient demographic & geographic distribution
-│   ├── 02_data_cleaning.ipynb             # Null imputation, logic checks, date consistency
-│   ├── 03_feature_engineering.ipynb      # Length of Stay (LOS), procedure costs, write-off risks
-│   ├── 04_visualization.ipynb             # Seaborn & Matplotlib custom analytical plots
-│   └── 05_business_insights.ipynb         # Bed occupancy and Random Forest Readmission Drivers
-├── dashboards/            # Theme templates and specifications for Power BI dashboards
-├── visuals/               # Exported PNGs, wait-time plots, and feature importances
-└── scripts/               # Automated Python execution scripts for cleaning and loading
+This project delivers a **production-style, end-to-end analytical solution** utilizing a normalized PostgreSQL relational database, advanced SQL CTEs/window queries, distinct Python exploratory, ETL/cleaning, and engineering pipelines, and an analytical **scikit-learn machine learning classifier** to predict patient readmission risks. 
+
+---
+
+## 2. Relational Database Data Model
+
+We modeled our transactional operations into a highly efficient **relational star schema** in PostgreSQL (see [sql/01_schema.sql](sql/01_schema.sql)):
+
+```
+                       +-------------------+
+                       |    patients       |
+                       +-------------------+
+                                 | 1
+                                 |
+                                 | *
++-------------------+  * +-------------------+ *  +-------------------+
+|    doctors        |----+ Inpatient Stays   |----+    departments     |
++-------------------+ 1  | (admissions)      | 1  +-------------------+
+                         +-------------------+              | 1
+                                 | 1                        |
+                                 |                          | *
+                                 | *                        |
+                       +-------------------+                |
+                       |    billing        |----------------+
+                       +-------------------+
+                                 | 1
+                                 |
+                                 | *
+                       +-------------------+
+                       |    treatments     |
+                       +-------------------+
+```
+
+### Table Definitions & Keys:
+1. **`departments`** (Reference Table): Core clinical divisions and service lines.
+2. **`beds`** (Reference Table): Staffed and licensed bed counts per department.
+3. **`patients`** (Dimension Table): Demographic profiles, location, and insurance types.
+4. **`doctors`** (Dimension Table): Care provider names, medical lines, and employment status.
+5. **`admissions`** (Fact Table): Admission types, length of stay, wait times, severity scores, and readmission targets.
+6. **`billing`** (Financial Fact Table): Patient charges, direct operating costs, insurance payments, and out-of-pocket metrics.
+7. **`satisfaction_surveys`** (Fact Table): Post-discharge satisfaction scores and response timelines.
+8. **`treatments`** (Fact Table): Specific procedure codes and treatment expenses.
+
+---
+
+## 3. Executive KPI Dashboard Scorecard
+
+Every clinical and financial metric is fully auditable and reconciles to our normalized relational tables (see [reports/executive_report.md](reports/executive_report.md)):
+
+| Hospital Performance KPI | Cleaned Empirical Value | Business Domain Interpretation |
+|---|---|---|
+| **Total Admissions** | **45,000** | Full patient volume tracked over 3-year cycle (2023 - 2025). |
+| **Inpatient Length of Stay (LOS)** | **4.0 Days** | Smooth baseline inpatient capacity metric. |
+| **30-Day Readmission Rate** | **7.0%** | Quality of clinical transition and care standards. |
+| **Triage Patient Wait Time** | **27.1 Mins** | Operational throughput efficiency in emergency/urgent care. |
+| **Patient Satisfaction Score** | **79.6%** | Patient experience rating (out of 100). |
+| **Gross Billings Revenue** | **$251.7M** | Consolidated gross medical charges generated. |
+
+---
+
+## 4. Advanced PostgreSQL Query Examples
+
+To showcase complex relational data engineering capability, we authored **22 production-grade PostgreSQL analytical queries** (see [sql/20_business_analysis_queries.sql](sql/20_business_analysis_queries.sql)). Highlights include:
+
+### A. 3-Month Moving Average of Monthly Admissions (CTEs & LAG Windowing)
+Calculates net month-over-month volume change and smoothes seasonality trends using multi-row partition framing.
+```sql
+WITH monthly_counts AS (
+    SELECT
+        DATE_TRUNC('month', admission_date)::DATE AS admission_month,
+        COUNT(admission_id) AS admissions_count
+    FROM analytics.admissions
+    GROUP BY 1
+)
+SELECT
+    admission_month,
+    admissions_count,
+    admissions_count - LAG(admissions_count) OVER (ORDER BY admission_month) AS mom_admission_change,
+    ROUND(AVG(admissions_count) OVER (
+        ORDER BY admission_month
+        ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
+    ), 1) AS moving_avg_3m_admissions
+FROM monthly_counts;
+```
+
+### B. Statistical Triage Wait-Time Outliers (3x Standard Deviations)
+Identifies extreme patient wait times exceeding 3 standard deviations from the department's mean, isolating operational bottlenecks.
+```sql
+WITH wait_stats AS (
+    SELECT
+        department_id,
+        AVG(wait_minutes) AS avg_wait,
+        STDDEV(wait_minutes) AS std_wait
+    FROM analytics.admissions
+    GROUP BY 1
+)
+SELECT
+    a.admission_id,
+    p.patient_name,
+    dept.department,
+    a.wait_minutes,
+    ROUND((a.wait_minutes - ws.avg_wait) / ws.std_wait, 2) AS z_score
+FROM analytics.admissions a
+JOIN analytics.patients p ON a.patient_id = p.patient_id
+JOIN analytics.departments dept ON a.department_id = dept.department_id
+JOIN wait_stats ws ON a.department_id = ws.department_id
+WHERE a.wait_minutes > (ws.avg_wait + (3 * ws.std_wait));
 ```
 
 ---
 
-## 📈 Hospital Operational KPIs (Calculated Baseline)
+## 5. Python Data Science & Machine Learning Pipeline
 
-These high-level metrics are computed from the historical patient admission, staffing, and billing database, ensuring an auditable and mathematically consistent baseline:
+Our analytical pipeline is divided into **5 structured, highly documented Jupyter Notebooks** located under [notebooks/](notebooks/):
 
-| Healthcare Metric | Calculated Value | Business Significance |
-|:---|---:|:---|
-| **30-Day Readmission Rate** | **10.7%** | Core quality indicator (Target under 11.5% to avoid penalties). |
-| **Bed Occupancy Rate** | **14.2%** | Average capacity utilization (Highlights room for expansion). |
-| **Doctor Clinical Utilization** | **38.3%** | Mean workload share across active medical personnel. |
-| **Revenue per Department** | **$17.8M** | Highest average charges driven by Cardiology and Surgery lines. |
-| **Discharge Efficiency Score** | **87.9%** | Efficiency index of patient release processes (Goal: >85%). |
-| **Emergency Admission Rate** | **38.1%** | Total cases entering through ER triage relative to elective admissions. |
+1. **`01_eda.ipynb`** (Exploratory Data Analysis): Profiles clinical variables, maps distributions, and generates correlation heatmaps.
+2. **`02_data_cleaning.ipynb`** (Deduplication & Outlier Clipping): Performs logical type casting, checks date constraints, and applies a **3x IQR statistical clipping** to remove billing outliers.
+3. **`03_feature_engineering.ipynb`** (Indicator Creation): Engineers weekend admission flags, patient age groupings, procedure aggregations, and financial profit margin fields.
+4. **`04_visualization.ipynb`** (Interactive Dashboards): Plots boxplots of wait times, violin plots of satisfaction, and generates interactive Scatter plots.
+5. **`05_business_insights.ipynb`** (Predictive Modeling): Trains a **Random Forest Classifier** to predict **30-day patient readmissions** (ROC-AUC: **0.78**), isolating **Discharge Efficiency** and **Patient Age** as the top mathematical risk predictors.
 
 ---
 
-## 🛠️ Tech Stack & Key Libraries
-- **Database:** PostgreSQL (v12+) — custom schema design, indexes, multi-stage CTEs, window functions.
-- **Languages:** Python (v3.11), T-SQL/PostgreSQL, Power BI DAX.
-- **Python Ecosystem:**
-  - `pandas` & `numpy` — high-performance data wrangling, feature engineering, DDL mocks.
-  - `matplotlib` & `seaborn` — publication-quality custom static plots and heatmaps.
-  - `scikit-learn` — Random Forest Classifier used to isolate feature importances driving readmissions.
-- **BI Platform:** Power BI Desktop — Star schema modeling, time-intelligence DAX measures.
+## 6. Strategic Business & Administrative Recommendations
+
+1. **Weekend Shift Rebalancing:** Increase triage nurse capacity by **15% on weekend evenings** to address the 35% wait-time spike identified on Fridays/Saturdays.
+2. **Clinical Transition-of-Care checklists:** Mandate standardized pre-discharge checkups for patients with low discharge efficiency ratings. Patients discharged under high clinical rush (low efficiency) exhibit a **3.4x readmission probability**.
+3. **Targeted Bed Reallocation:** Move **15% of staffed beds** from under-utilized Primary Care wards (currently under 45% occupancy) to Cardiology and Acute Care wings (operating at over 85% capacity).
 
 ---
 
-## 📊 Core Analytical Highlights & Visuals
+## 7. How To Re-Run End-to-End
 
-### 1. Patient Readmission Drivers (from [05_business_insights.ipynb](notebooks/05_business_insights.ipynb))
-Using engineered variables (including length of stay, ER wait times, severity scores, and procedural charges), we trained a classification tree to mathematically rank why patients are readmitted:
-1. **Length of Stay (LOS):** Longer stays are the highest predictor of subsequent 30-day readmissions.
-2. **Discharge Efficiency:** Shorter, hasty patient releases significantly increase readmission rates.
-3. **Severity Score:** Higher triage severity levels naturally exhibit greater recurring care needs.
-
-### 2. PostgreSQL Business Engine (from [20_business_analysis_queries.sql](sql/20_business_analysis_queries.sql))
-Contains **22 advanced PostgreSQL scripts** that answer critical business questions, such as:
-- **Query 2 (Bed Occupancy Rate):** Joins beds staffed and licensed records with actual stay durations. Tracks bed congestion by medical department.
-- **Query 5 (Geriatric Readmissions):** Computes readmission rates specifically across geriatric cohorts to isolate senior care gaps.
-- **Query 14 (Billing Leak Diagnosis):** Financial audit checking cases where direct clinical procedure costs exceed final patient charges (identifying billing leakage).
-
----
-
-## 🎯 Strategic Hospital Recommendations
-
-Based on the quantitative findings from our SQL and Python pipelines, we propose three tactical focus areas for hospital leadership:
-
-1. **ER Wait Time Optimizations:** Since Emergency stays represent **38.1%** of all cases and wait times strongly correlate with patient satisfaction, restructuring triage protocols during peak hours can significantly improve satisfaction scores.
-2. **Discharge Efficiency Standardizations:** Our analysis surfaces an overall **Discharge Efficiency score of 87.9%**, but also shows that hasty, low-efficiency discharges significantly spike 30-day readmissions. Implementing a clinical discharge checklist can help maintain optimal standards.
-3. **Targeted Bed Allocation:** Reallocate staffed beds to departments displaying over-utilization (as surfaced in our Bed Occupancy Analysis) to optimize overall hospital patient flow.
-
----
-
-## 🚀 How to Run the Analysis
-
-### 1. Prerequisites
-Ensure you have Python 3.11 installed locally, along with a PostgreSQL server instance.
-
-### 2. Install Dependencies
+### Prerequisites
+Install all requirements:
 ```bash
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 ```
 
-### 3. Database Schema Setup
-1. Create a database called `healthcare_analytics`.
-2. Execute the DDL script in your database shell or query tool:
+### Execution Flow
+1. **Regenerate Raw Relational Data:**
    ```bash
-   psql -U postgres -d healthcare_analytics -f sql/01_schema.sql
+   python scripts/generate_data.py
    ```
-3. Load the cleaned CSV tables located under `data/cleaned/` into your corresponding schema tables.
-
-### 4. Run Notebooks
-Open VS Code or Jupyter and step through the files in `notebooks/` chronologically from `01_eda.ipynb` to `05_business_insights.ipynb` to see the full data-cleaning, engineering, and predictive modeling pipeline.
+2. **Execute Clinical ETL Cleaning & Modeling:**
+   ```bash
+   python scripts/clean_data.py
+   ```
+3. **Perform Automated Constraint & Integrity Assertions:**
+   ```bash
+   python scripts/validate_data.py
+   ```
 
 ---
 
-## 👤 Author
-**Ravikant Yadav**  
-*Data Analyst & Business Intelligence Specialist*  
-- **Email:** [yadavravikant597@gmail.com](mailto:yadavravikant597@gmail.com)  
-- **LinkedIn:** [Ravikant Yadav](https://www.linkedin.com/in/ravikant-yadav)  
-- **GitHub:** [ravi020410](https://github.com/ravi020410)
+## 8. Portfolio Resume Alignment
+
+This project establishes the technical credentials listed in my resume:
+* **Relational Database Design:** Normalization of dimension and fact tables, indices, and constraints in PostgreSQL.
+* **Advanced Query Engineering:** Window aggregates, CTE joins, DDL schemas, and outlier detection models.
+* **Programmatic Data Science:** Outlier treatment, feature construction, interactive Plotly visualization, and Random Forest classification using scikit-learn.
+* **Strategic Business Alignment:** Translating technical statistical summaries into actionable operating plans for executive leadership.
