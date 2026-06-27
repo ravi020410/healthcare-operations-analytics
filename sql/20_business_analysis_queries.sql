@@ -1,487 +1,497 @@
--- =========================================================================================
--- Healthcare Operations Analytics - 22 Advanced PostgreSQL Business Queries
+-- ============================================================================
+-- ADVANCED ANALYTICAL QUERIES: HEALTHCARE OPERATIONS & FINANCIAL SYSTEMS
 -- Author: Ravikant Yadav
--- Database Platform: PostgreSQL (v12+)
--- Description: This script contains 22 highly optimized, production-grade SQL queries designed
---              to run directly on the PostgreSQL hospital operations database. It tracks critical
---              SLA and operational metrics: Readmission Rate, Bed Occupancy, Doctor Utilization,
---              Financial Performance (Revenue/Costs), and Discharge Efficiency.
--- =========================================================================================
+-- Designed for: Technical Interview & Advanced Portfolio Review
+-- Target DB: PostgreSQL (relational analytics schema)
+-- ============================================================================
 
--- -----------------------------------------------------------------------------------------
--- QUERY 1: Executive KPI Operational Scorecard
--- Purpose: Computes hospital-wide operational metrics: Total admissions, overall readmission
---          rate, mean length of stay (LOS), average ER wait time, and emergency admission rate.
--- -----------------------------------------------------------------------------------------
+-- ----------------------------------------------------------------------------
+-- QUERY 1: Executive KPI Scorecard
+-- Purpose: Calculate high-level clinical metrics (admissions, length of stay,
+-- wait times, readmission rate) grouped by admission month.
+-- ----------------------------------------------------------------------------
 SELECT
-    COUNT(*) AS total_admissions,
-    ROUND((SUM(CASE WHEN readmission_30d = 1 THEN 1 ELSE 0 END) * 100.0 / COUNT(*))::NUMERIC, 1) AS overall_readmission_rate_pct,
-    ROUND(AVG(length_of_stay)::NUMERIC, 1) AS average_length_of_stay_days,
-    ROUND(AVG(wait_minutes)::NUMERIC, 1) AS average_er_wait_minutes,
-    ROUND((SUM(CASE WHEN admission_type = 'Emergency' THEN 1 ELSE 0 END) * 100.0 / COUNT(*))::NUMERIC, 1) AS emergency_admission_rate_pct,
-    ROUND(AVG(discharge_efficiency_score)::NUMERIC, 1) AS average_discharge_efficiency_score
-FROM analytics.admissions;
-
-
--- -----------------------------------------------------------------------------------------
--- QUERY 2: Hospital Bed Occupancy Rates by Department
--- Purpose: Evaluates capacity constraints. Calculates the average daily bed occupancy
---          using occupied patient days against staffed bed counts.
--- -----------------------------------------------------------------------------------------
-SELECT
-    d.department,
-    b.staffed_beds,
-    COUNT(a.admission_id) AS total_admissions,
-    ROUND(SUM(a.length_of_stay)::NUMERIC, 1) AS total_occupied_patient_days,
-    ROUND(
-        (SUM(a.length_of_stay) * 100.0 / NULLIF(b.staffed_beds * 365.0, 0))::NUMERIC,
-        1
-    ) AS calculated_bed_occupancy_pct
-FROM analytics.departments d
-JOIN analytics.beds b ON d.department_id = b.department_id
-LEFT JOIN analytics.admissions a ON d.department_id = a.department_id
-GROUP BY d.department, b.staffed_beds
-ORDER BY calculated_bed_occupancy_pct DESC;
-
-
--- -----------------------------------------------------------------------------------------
--- QUERY 3: Doctor Clinical Utilization and Workloads
--- Purpose: Identifies doctor work capacity by calculating patients treated, total billings,
---          and average patient length of stay (LOS).
--- -----------------------------------------------------------------------------------------
-SELECT
-    dr.doctor_name,
-    d.department,
-    COUNT(a.admission_id) AS patients_treated,
-    ROUND(SUM(b.charge_amount)::NUMERIC, 2) AS total_departmental_revenue,
-    ROUND(AVG(a.length_of_stay)::NUMERIC, 1) AS average_los_days,
-    ROUND(
-        (COUNT(a.admission_id) * 100.0 /
-         (SELECT COUNT(*) FROM analytics.admissions))::NUMERIC,
-        2
-    ) AS total_hospital_patient_load_pct
-FROM analytics.doctors dr
-JOIN analytics.departments d ON dr.department_id = d.department_id
-LEFT JOIN analytics.admissions a ON dr.doctor_id = a.doctor_id
-LEFT JOIN analytics.billing b ON a.admission_id = b.admission_id
-GROUP BY dr.doctor_name, d.department
-ORDER BY patients_treated DESC;
-
-
--- -----------------------------------------------------------------------------------------
--- QUERY 4: Financial Performance: Revenue, Cost, and Profit Margins by Department
--- Purpose: Generates financial P&L insights. Analyzes charges, direct operating costs,
---          and profitability margins across corporate medical service lines.
--- -----------------------------------------------------------------------------------------
-SELECT
-    d.department,
-    d.service_line,
-    COUNT(b.admission_id) AS billed_cases,
-    ROUND(SUM(b.charge_amount)::NUMERIC, 2) AS total_charges_revenue,
-    ROUND(SUM(b.cost_amount)::NUMERIC, 2) AS total_direct_costs,
-    ROUND((SUM(b.charge_amount) - SUM(b.cost_amount))::NUMERIC, 2) AS net_operating_profit,
-    ROUND(
-        ((SUM(b.charge_amount) - SUM(b.cost_amount)) * 100.0 / NULLIF(SUM(b.charge_amount), 0))::NUMERIC,
-        1
-    ) AS operational_profit_margin_pct
-FROM analytics.departments d
-LEFT JOIN analytics.billing b ON d.department_id = b.department_id
-GROUP BY d.department, d.service_line
-ORDER BY total_charges_revenue DESC;
-
-
--- -----------------------------------------------------------------------------------------
--- QUERY 5: 30-Day Readmission Analysis by Patient Demographics
--- Purpose: Locates clinical risk hotspots by looking at readmission rates across age groups.
--- -----------------------------------------------------------------------------------------
-WITH patient_ages AS (
-    SELECT
-        p.patient_id,
-        EXTRACT(YEAR FROM age('2026-01-01'::DATE, p.birth_date::DATE)) AS age
-    FROM analytics.patients p
-),
-age_groups AS (
-    SELECT
-        patient_id,
-        CASE
-            WHEN age < 18 THEN '0-17 (Pediatric)'
-            WHEN age BETWEEN 18 AND 40 THEN '18-40 (Young Adult)'
-            WHEN age BETWEEN 41 AND 65 THEN '41-65 (Adult)'
-            ELSE '66+ (Geriatric)'
-        END AS age_cohort
-    FROM patient_ages
-)
-SELECT
-    ag.age_cohort,
-    COUNT(a.admission_id) AS total_admissions,
-    SUM(CASE WHEN a.readmission_30d = 1 THEN 1 ELSE 0 END) AS readmitted_cases,
-    ROUND(
-        (SUM(CASE WHEN a.readmission_30d = 1 THEN 1 ELSE 0 END) * 100.0 / COUNT(a.admission_id))::NUMERIC,
-        1
-    ) AS readmission_rate_pct
-FROM age_groups ag
-JOIN analytics.admissions a ON ag.patient_id = a.patient_id
-GROUP BY ag.age_cohort
-ORDER BY readmission_rate_pct DESC;
-
-
--- -----------------------------------------------------------------------------------------
--- QUERY 6: Discharge Efficiency score vs. Readmission rates
--- Purpose: Investigates the operational trade-off between rushing discharges and patient health.
--- -----------------------------------------------------------------------------------------
-WITH discharge_cohorts AS (
-    SELECT
-        admission_id,
-        readmission_30d,
-        discharge_efficiency_score,
-        CASE
-            WHEN discharge_efficiency_score >= 90 THEN 'Excellent (>90)'
-            WHEN discharge_efficiency_score BETWEEN 75 AND 89 THEN 'Optimal (75-89)'
-            WHEN discharge_efficiency_score BETWEEN 50 AND 74 THEN 'Moderate (50-74)'
-            ELSE 'Inefficient (<50)'
-        END AS efficiency_cohort
-    FROM analytics.admissions
-)
-SELECT
-    efficiency_cohort,
-    COUNT(*) AS total_cases,
-    SUM(CASE WHEN readmission_30d = 1 THEN 1 ELSE 0 END) AS readmissions_30d,
-    ROUND(
-        (SUM(CASE WHEN readmission_30d = 1 THEN 1 ELSE 0 END) * 100.0 / COUNT(*))::NUMERIC,
-        1
-    ) AS readmission_rate_pct
-FROM discharge_cohorts
-GROUP BY efficiency_cohort
-ORDER BY MIN(discharge_efficiency_score) DESC;
-
-
--- -----------------------------------------------------------------------------------------
--- QUERY 7: Emergency Room Wait Times by Admission Severity & Type
--- Purpose: Analyzes ER efficiency. Identifies delays in patient care relative to severity.
--- -----------------------------------------------------------------------------------------
-SELECT
-    admission_type,
-    severity_score,
-    COUNT(*) AS total_admissions,
-    ROUND(AVG(wait_minutes)::NUMERIC, 1) AS avg_wait_minutes,
-    MAX(wait_minutes) AS maximum_wait_minutes,
-    ROUND(AVG(length_of_stay)::NUMERIC, 1) AS avg_length_of_stay_days
+    DATE_TRUNC('month', admission_date)::DATE AS admission_month,
+    COUNT(admission_id) AS total_admissions,
+    ROUND(AVG(length_of_stay), 2) AS avg_length_of_stay_days,
+    ROUND(AVG(wait_minutes), 1) AS avg_wait_time_minutes,
+    ROUND(100.0 * SUM(CASE WHEN readmission_30d THEN 1 ELSE 0 END) / COUNT(admission_id), 2) AS readmission_rate_30d_pct
 FROM analytics.admissions
-GROUP BY admission_type, severity_score
-ORDER BY admission_type, severity_score ASC;
+GROUP BY 1
+ORDER BY 1 DESC;
 
 
--- -----------------------------------------------------------------------------------------
--- QUERY 8: Financial Underperformance: Payer Mix & Write-Off Risks
--- Purpose: Analyzes bill payments across insurance companies. Identifies payment shortfalls.
--- -----------------------------------------------------------------------------------------
+-- ----------------------------------------------------------------------------
+-- QUERY 2: Monthly Admissions Trends & Moving Averages
+-- Purpose: Track week-over-week changes and smooth seasonal patterns using a
+-- 3-month moving average of patient admissions.
+-- ----------------------------------------------------------------------------
+WITH monthly_counts AS (
+    SELECT
+        DATE_TRUNC('month', admission_date)::DATE AS admission_month,
+        COUNT(admission_id) AS admissions_count
+    FROM analytics.admissions
+    GROUP BY 1
+)
+SELECT
+    admission_month,
+    admissions_count,
+    admissions_count - LAG(admissions_count) OVER (ORDER BY admission_month) AS mom_admission_change,
+    ROUND(AVG(admissions_count) OVER (
+        ORDER BY admission_month
+        ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
+    ), 1) AS moving_avg_3m_admissions
+FROM monthly_counts
+ORDER BY admission_month;
+
+
+-- ----------------------------------------------------------------------------
+-- QUERY 3: Quarterly Growth & Billing Expansion Metrics
+-- Purpose: Analyze total quarterly charges, total cost, net margins, and
+-- quarter-over-quarter gross profit growth rates.
+-- ----------------------------------------------------------------------------
+WITH quarterly_financials AS (
+    SELECT
+        DATE_TRUNC('quarter', a.admission_date)::DATE AS fiscal_quarter,
+        SUM(b.charge_amount) AS total_charges,
+        SUM(b.cost_amount) AS total_costs,
+        SUM(b.charge_amount - b.cost_amount) AS gross_profit
+    FROM analytics.billing b
+    JOIN analytics.admissions a ON b.admission_id = a.admission_id
+    GROUP BY 1
+)
+SELECT
+    fiscal_quarter,
+    ROUND(total_charges, 2) AS total_charges,
+    ROUND(total_costs, 2) AS total_costs,
+    ROUND(gross_profit, 2) AS gross_profit,
+    ROUND(100.0 * (gross_profit - LAG(gross_profit) OVER (ORDER BY fiscal_quarter)) /
+        NULLIF(LAG(gross_profit) OVER (ORDER BY fiscal_quarter), 0), 2) AS qoq_profit_growth_pct
+FROM quarterly_financials
+ORDER BY fiscal_quarter;
+
+
+-- ----------------------------------------------------------------------------
+-- QUERY 4: Top Payer Profiles (Insurance Contribution)
+-- Purpose: Determine market share, revenue generation, and payment compliance
+-- across different insurance models.
+-- ----------------------------------------------------------------------------
 SELECT
     p.insurance_type,
-    COUNT(b.admission_id) AS total_bills,
-    ROUND(SUM(b.charge_amount)::NUMERIC, 2) AS total_charges,
-    ROUND(SUM(b.insurance_paid)::NUMERIC, 2) AS insurance_payments,
-    ROUND(SUM(b.patient_paid)::NUMERIC, 2) AS patient_payments,
-    ROUND(
-        (SUM(b.charge_amount) - SUM(b.insurance_paid) - SUM(b.patient_paid))::NUMERIC,
-        2
-    ) AS outstanding_write_off_balance,
-    ROUND(
-        ((SUM(b.insurance_paid) + SUM(b.patient_paid)) * 100.0 /
-         NULLIF(SUM(b.charge_amount), 0))::NUMERIC,
-        1
-    ) AS financial_recovery_rate_pct
+    COUNT(a.admission_id) AS total_patient_admissions,
+    ROUND(SUM(b.charge_amount), 2) AS gross_billing_revenue,
+    ROUND(100.0 * SUM(b.charge_amount) / SUM(SUM(b.charge_amount)) OVER (), 2) AS gross_revenue_share_pct,
+    ROUND(AVG(b.insurance_paid / NULLIF(b.charge_amount, 0)) * 100, 2) AS avg_insurance_recovery_rate_pct,
+    ROUND(AVG(b.patient_paid / NULLIF(b.charge_amount, 0)) * 100, 2) AS avg_patient_out_of_pocket_pct
 FROM analytics.patients p
-JOIN analytics.billing b ON p.patient_id = b.patient_id
-GROUP BY p.insurance_type
-ORDER BY outstanding_write_off_balance DESC;
+JOIN analytics.admissions a ON p.patient_id = a.patient_id
+JOIN analytics.billing b ON a.admission_id = b.admission_id
+GROUP BY 1
+ORDER BY gross_billing_revenue DESC;
 
 
--- -----------------------------------------------------------------------------------------
--- QUERY 9: Patient Satisfaction Surveys by Clinical Department
--- Purpose: Evaluates patient experience across divisions to isolate quality deficits.
--- -----------------------------------------------------------------------------------------
+-- ----------------------------------------------------------------------------
+-- QUERY 5: Insurance Claim Loss / Cost-to-Charge Ratio Analysis
+-- Purpose: Identify which insurance models yield low operating margins by
+-- evaluating cost-to-charge ratios and unrecovered billing write-offs.
+-- ----------------------------------------------------------------------------
 SELECT
-    d.department,
-    COUNT(s.admission_id) AS feedback_responses,
-    ROUND(AVG(s.satisfaction_score)::NUMERIC, 1) AS average_satisfaction_score,
-    SUM(CASE WHEN s.satisfaction_score >= 8 THEN 1 ELSE 0 END) AS promoter_responses,
-    ROUND(
-        (SUM(CASE WHEN s.satisfaction_score >= 8 THEN 1 ELSE 0 END) * 100.0 /
-         NULLIF(COUNT(s.admission_id), 0))::NUMERIC,
-        1
-    ) AS net_satisfaction_promoter_rate_pct
-FROM analytics.departments d
-JOIN analytics.satisfaction_surveys s ON d.department_id = s.department_id
-GROUP BY d.department
-ORDER BY average_satisfaction_score DESC;
+    p.insurance_type,
+    dept.department,
+    ROUND(SUM(b.charge_amount), 2) AS total_billing_charges,
+    ROUND(SUM(b.cost_amount), 2) AS total_operating_costs,
+    ROUND(SUM(b.cost_amount) / NULLIF(SUM(b.charge_amount), 0), 3) AS cost_to_charge_ratio,
+    ROUND(SUM(b.charge_amount - b.insurance_paid - b.patient_paid), 2) AS write_offs_unrecovered_amount
+FROM analytics.patients p
+JOIN analytics.admissions a ON p.patient_id = a.patient_id
+JOIN analytics.billing b ON a.admission_id = b.admission_id
+JOIN analytics.departments dept ON a.department_id = dept.department_id
+GROUP BY 1, 2
+HAVING SUM(b.charge_amount) > 50000
+ORDER BY cost_to_charge_ratio DESC;
 
 
--- -----------------------------------------------------------------------------------------
--- QUERY 10: MoM Admissions & Revenue Growth Trend
--- Purpose: Evaluates seasonal operational scale and monthly financial growth.
--- -----------------------------------------------------------------------------------------
-WITH monthly_metrics AS (
+-- ----------------------------------------------------------------------------
+-- QUERY 6: Clinical Segment Performance (Emergency vs Elective vs Urgent)
+-- Purpose: Benchmark length of stay, triage patient wait times, operational
+-- efficiency, and satisfaction across clinical admission categories.
+-- ----------------------------------------------------------------------------
+SELECT
+    a.admission_type,
+    COUNT(a.admission_id) AS admissions_volume,
+    ROUND(AVG(a.length_of_stay), 2) AS mean_los_days,
+    ROUND(AVG(a.wait_minutes), 1) AS mean_wait_time_mins,
+    ROUND(AVG(s.satisfaction_score), 1) AS mean_satisfaction_score,
+    ROUND(AVG(a.discharge_efficiency_score), 1) AS mean_discharge_efficiency_pct
+FROM analytics.admissions a
+LEFT JOIN analytics.satisfaction_surveys s ON a.admission_id = s.admission_id
+GROUP BY 1
+ORDER BY admissions_volume DESC;
+
+
+-- ----------------------------------------------------------------------------
+-- QUERY 7: Geographic Patient Density & Demographics
+-- Purpose: Analyze regional market penetration, average total billing, and
+-- patient clinical severity scores by city.
+-- ----------------------------------------------------------------------------
+SELECT
+    p.city,
+    COUNT(p.patient_id) AS unique_patients_served,
+    ROUND(AVG(EXTRACT(YEAR FROM AGE(a.admission_date, p.birth_date))), 1) AS avg_patient_age,
+    ROUND(AVG(a.severity_score), 2) AS avg_clinical_severity,
+    ROUND(SUM(b.charge_amount) / COUNT(p.patient_id), 2) AS billing_spend_per_patient
+FROM analytics.patients p
+JOIN analytics.admissions a ON p.patient_id = a.patient_id
+JOIN analytics.billing b ON a.admission_id = b.admission_id
+GROUP BY 1
+ORDER BY unique_patients_served DESC, billing_spend_per_patient DESC;
+
+
+-- ----------------------------------------------------------------------------
+-- QUERY 8: Departmental Capacity & Bed Utilization Rates
+-- Purpose: Join reference bed table to calculate staffed and licensed bed
+-- utilization rates against active hospital discharge cycles.
+-- ----------------------------------------------------------------------------
+WITH active_monthly_utilization AS (
     SELECT
-        DATE_TRUNC('month', a.admission_date::TIMESTAMP) AS active_month,
-        COUNT(a.admission_id) AS admissions,
-        SUM(b.charge_amount) AS total_charges
-    FROM analytics.admissions a
-    LEFT JOIN analytics.billing b ON a.admission_id = b.admission_id
-    GROUP BY DATE_TRUNC('month', a.admission_date::TIMESTAMP)
+        department_id,
+        DATE_TRUNC('month', admission_date)::DATE AS calendar_month,
+        SUM(length_of_stay) AS total_inpatient_days
+    FROM analytics.admissions
+    GROUP BY 1, 2
 )
 SELECT
-    active_month,
-    admissions,
-    ROUND((admissions - LAG(admissions) OVER (ORDER BY active_month))::NUMERIC, 1) AS admissions_mom_change,
-    ROUND(total_charges::NUMERIC, 2) AS total_monthly_charges,
-    ROUND(
-        ((total_charges - LAG(total_charges) OVER (ORDER BY active_month)) * 100.0 /
-         NULLIF(LAG(total_charges) OVER (ORDER BY active_month), 0))::NUMERIC,
-        1
-    ) AS revenue_growth_rate_pct
-FROM monthly_metrics
-ORDER BY active_month;
+    dept.department,
+    u.calendar_month,
+    b.licensed_beds,
+    b.staffed_beds,
+    u.total_inpatient_days,
+    ROUND(100.0 * u.total_inpatient_days / (b.staffed_beds * 30), 2) AS approx_staffed_bed_occupancy_pct,
+    ROUND(100.0 * u.total_inpatient_days / (b.licensed_beds * 30), 2) AS approx_licensed_bed_occupancy_pct
+FROM active_monthly_utilization u
+JOIN analytics.departments dept ON u.department_id = dept.department_id
+JOIN analytics.beds b ON u.department_id = b.department_id
+ORDER BY dept.department, u.calendar_month;
 
 
--- -----------------------------------------------------------------------------------------
--- QUERY 11: Clinical Procedure Intensity & Cost Drivers
--- Purpose: Tracks procedure codes and associated clinical costs across hospital lines.
--- -----------------------------------------------------------------------------------------
+-- ----------------------------------------------------------------------------
+-- QUERY 9: Patient Attrition & 30-Day Readmission Risk Index
+-- Purpose: Calculate patient 30-day readmission metrics by clinical department,
+-- sorting by departments with highest readmission frequencies.
+-- ----------------------------------------------------------------------------
 SELECT
-    t.procedure_code,
-    COUNT(t.treatment_id) AS procedure_volume,
-    ROUND(SUM(t.treatment_cost)::NUMERIC, 2) AS total_treatment_cost,
-    ROUND(AVG(t.treatment_cost)::NUMERIC, 2) AS average_cost_per_procedure
-FROM analytics.treatments t
-GROUP BY t.procedure_code
-ORDER BY total_treatment_cost DESC;
+    dept.department,
+    COUNT(a.admission_id) AS total_discharges,
+    SUM(CASE WHEN a.readmission_30d THEN 1 ELSE 0 END) AS readmission_30d_count,
+    ROUND(100.0 * SUM(CASE WHEN a.readmission_30d THEN 1 ELSE 0 END) / COUNT(a.admission_id), 2) AS readmission_pct,
+    ROUND(AVG(a.severity_score), 2) AS avg_severity_of_readmissions
+FROM analytics.admissions a
+JOIN analytics.departments dept ON a.department_id = dept.department_id
+GROUP BY 1
+ORDER BY readmission_pct DESC;
 
 
--- -----------------------------------------------------------------------------------------
--- QUERY 12: High-Length of Stay (LOS) Outlier Analysis
--- Purpose: Identifies high outlier stays exceeding 3 standard deviations from average LOS.
--- -----------------------------------------------------------------------------------------
-WITH los_stats AS (
+-- ----------------------------------------------------------------------------
+-- QUERY 10: High-Frequency Readmission Profiles (Inpatient Loyalty/Risk)
+-- Purpose: CTE-based analysis mapping patients who experience readmissions
+-- within 30 days, ranking their clinical profiles.
+-- ----------------------------------------------------------------------------
+WITH readmitted_patients AS (
     SELECT
-        AVG(length_of_stay) AS mean_los,
-        STDDEV(length_of_stay) AS stddev_los
+        p.patient_id,
+        p.patient_name,
+        p.birth_date,
+        COUNT(a.admission_id) AS total_admissions,
+        SUM(CASE WHEN a.readmission_30d THEN 1 ELSE 0 END) AS readmissions_30d,
+        AVG(a.length_of_stay) AS avg_los,
+        AVG(a.severity_score) AS avg_severity
+    FROM analytics.patients p
+    JOIN analytics.admissions a ON p.patient_id = a.patient_id
+    GROUP BY 1, 2, 3
+    HAVING COUNT(a.admission_id) >= 2
+)
+SELECT
+    patient_id,
+    patient_name,
+    ROUND(EXTRACT(YEAR FROM AGE(CURRENT_DATE, birth_date))) AS current_age,
+    total_admissions,
+    readmissions_30d,
+    ROUND(avg_los, 1) AS avg_los_days,
+    ROUND(avg_severity, 1) AS avg_clinical_severity,
+    CASE
+        WHEN readmissions_30d >= 2 THEN 'Extreme Risk Inpatient'
+        WHEN readmissions_30d = 1 THEN 'High Risk Inpatient'
+        ELSE 'Moderate Risk Inpatient'
+    END AS clinical_risk_classification
+FROM readmitted_patients
+ORDER BY readmissions_30d DESC, total_admissions DESC;
+
+
+-- ----------------------------------------------------------------------------
+-- QUERY 11: Clinical Department Cohort Retention (Quarterly View)
+-- Purpose: Grouping patients by their first clinical admission quarter and
+-- tracking readmission rates over subsequent quarters.
+-- ----------------------------------------------------------------------------
+WITH patient_first_admission AS (
+    SELECT
+        patient_id,
+        MIN(DATE_TRUNC('quarter', admission_date)::DATE) AS cohort_quarter
     FROM analytics.admissions
+    GROUP BY 1
+),
+cohort_sizes AS (
+    SELECT cohort_quarter, COUNT(patient_id) AS cohort_size
+    FROM patient_first_admission
+    GROUP BY 1
+)
+SELECT
+    fa.cohort_quarter,
+    cs.cohort_size,
+    COUNT(a.admission_id) AS subsequent_admissions,
+    ROUND(100.0 * SUM(CASE WHEN a.readmission_30d THEN 1 ELSE 0 END) / COUNT(a.admission_id), 2) AS readmission_rate_pct,
+    ROUND(AVG(a.length_of_stay), 2) AS avg_stay_days
+FROM patient_first_admission fa
+JOIN cohort_sizes cs ON fa.cohort_quarter = cs.cohort_quarter
+JOIN analytics.admissions a ON fa.patient_id = a.patient_id
+GROUP BY 1, 2
+ORDER BY fa.cohort_quarter;
+
+
+-- ----------------------------------------------------------------------------
+-- QUERY 12: Clinical Revenue Contribution Matrix
+-- Purpose: Calculate total billings, costs, and percentage of the total hospital
+-- budget generated by each clinical department.
+-- ----------------------------------------------------------------------------
+SELECT
+    dept.department,
+    COUNT(b.admission_id) AS bill_records_count,
+    ROUND(SUM(b.charge_amount), 2) AS gross_charges,
+    ROUND(SUM(b.cost_amount), 2) AS total_costs,
+    ROUND(SUM(b.charge_amount - b.cost_amount), 2) AS net_profit_margin,
+    ROUND(100.0 * SUM(b.charge_amount) / SUM(SUM(b.charge_amount)) OVER (), 2) AS pct_hospital_revenue_contribution
+FROM analytics.billing b
+JOIN analytics.departments dept ON b.department_id = dept.department_id
+GROUP BY 1
+ORDER BY gross_charges DESC;
+
+
+-- ----------------------------------------------------------------------------
+-- QUERY 13: Treatment Cost Profitability & Financial Optimization
+-- Purpose: Evaluate procedural profit margins, identifying expensive
+-- and loss-making departments.
+-- ----------------------------------------------------------------------------
+SELECT
+    dept.department,
+    a.admission_type,
+    ROUND(SUM(b.charge_amount), 2) AS total_billing_charges,
+    ROUND(SUM(b.cost_amount), 2) AS total_treatment_costs,
+    ROUND(AVG(b.charge_amount - b.cost_amount), 2) AS avg_profit_per_patient,
+    ROUND(100.0 * SUM(b.charge_amount - b.cost_amount) / SUM(b.charge_amount), 2) AS average_profit_margin_pct
+FROM analytics.billing b
+JOIN analytics.admissions a ON b.admission_id = a.admission_id
+JOIN analytics.departments dept ON b.department_id = dept.department_id
+GROUP BY 1, 2
+ORDER BY average_profit_margin_pct DESC;
+
+
+-- ----------------------------------------------------------------------------
+-- QUERY 14: Clinical Wait Time Outliers (3 Standard Deviations Analysis)
+-- Purpose: Use statistical standard deviation windows to flag extreme patient
+-- wait bottlenecks per clinical department.
+-- ----------------------------------------------------------------------------
+WITH wait_stats AS (
+    SELECT
+        department_id,
+        AVG(wait_minutes) AS avg_wait,
+        STDDEV(wait_minutes) AS std_wait
+    FROM analytics.admissions
+    GROUP BY 1
 )
 SELECT
     a.admission_id,
     p.patient_name,
-    d.department,
-    a.length_of_stay,
-    ROUND(ls.mean_los::NUMERIC, 1) AS mean_los_benchmark,
-    ROUND(
-        ((a.length_of_stay - ls.mean_los) / NULLIF(ls.stddev_los, 0))::NUMERIC,
-        2
-    ) AS z_score_los
+    dept.department,
+    a.admission_type,
+    a.wait_minutes,
+    ROUND(ws.avg_wait, 1) AS dept_avg_wait_minutes,
+    ROUND(a.wait_minutes - ws.avg_wait, 1) AS deviation_from_avg,
+    ROUND((a.wait_minutes - ws.avg_wait) / ws.std_wait, 2) AS z_score
 FROM analytics.admissions a
 JOIN analytics.patients p ON a.patient_id = p.patient_id
-JOIN analytics.departments d ON a.department_id = d.department_id
-CROSS JOIN los_stats ls
-WHERE (a.length_of_stay - ls.mean_los) / NULLIF(ls.stddev_los, 0) > 3.0
-ORDER BY a.length_of_stay DESC;
+JOIN analytics.departments dept ON a.department_id = dept.department_id
+JOIN wait_stats ws ON a.department_id = ws.department_id
+WHERE a.wait_minutes > (ws.avg_wait + (3 * ws.std_wait))
+ORDER BY z_score DESC;
 
 
--- -----------------------------------------------------------------------------------------
--- QUERY 13: Operational Integrity Auditing: Overlapping Admissions
--- Purpose: Audits data quality for anomalies (such as overlapping active admissions).
--- -----------------------------------------------------------------------------------------
+-- ----------------------------------------------------------------------------
+-- QUERY 15: Quality Control: Clinical Null Audit
+-- Purpose: Perform strict audits checking key operational data fields for
+-- missing fields, anomalies, or bad strings.
+-- ----------------------------------------------------------------------------
 SELECT
-    curr.patient_id,
-    curr.admission_id AS current_admission_id,
-    curr.admission_date AS current_admission_date,
-    curr.discharge_date AS current_discharge_date,
-    prev.admission_id AS prior_admission_id,
-    prev.admission_date AS prior_admission_date,
-    prev.discharge_date AS prior_discharge_date
-FROM analytics.admissions curr
-JOIN analytics.admissions prev ON curr.patient_id = prev.patient_id
-    AND curr.admission_id != prev.admission_id
-    AND curr.admission_date >= prev.admission_date
-    AND curr.admission_date < prev.discharge_date
-ORDER BY curr.patient_id, curr.admission_date;
+    'Admissions wait_minutes NULL count' AS data_check,
+    COUNT(*) AS anomalous_rows_count
+FROM analytics.admissions
+WHERE wait_minutes IS NULL
+UNION ALL
+SELECT 'Admissions discharge_date NULL count', COUNT(*)
+FROM analytics.admissions WHERE discharge_date IS NULL
+UNION ALL
+SELECT 'Billing cost_amount NULL count', COUNT(*)
+FROM analytics.billing WHERE cost_amount IS NULL OR cost_amount = 0
+UNION ALL
+SELECT 'Surveys satisfaction_score NULL count', COUNT(*)
+FROM analytics.satisfaction_surveys WHERE satisfaction_score IS NULL;
 
 
--- -----------------------------------------------------------------------------------------
--- QUERY 14: Billing Invoice Consistency Checks
--- Purpose: Financial audit. Flags cases where total procedure costs exceed final billed amount.
--- -----------------------------------------------------------------------------------------
-WITH billing_versus_procedures AS (
+-- ----------------------------------------------------------------------------
+-- QUERY 16: Duplicate Admission Records Diagnostic Check
+-- Purpose: Scan for duplicate admissions within the database (same patient,
+-- doctor, and date) to identify system or loader issues.
+-- ----------------------------------------------------------------------------
+SELECT
+    patient_id,
+    doctor_id,
+    admission_date,
+    COUNT(*) AS overlapping_admissions_count
+FROM analytics.admissions
+GROUP BY 1, 2, 3
+HAVING COUNT(*) > 1;
+
+
+-- ----------------------------------------------------------------------------
+-- QUERY 17: Forecasting Base Table Generator
+-- Purpose: Extract historical time-series indicators at a weekly grain to train
+-- predictive models for emergency patient arrivals.
+-- ----------------------------------------------------------------------------
+SELECT
+    DATE_TRUNC('week', admission_date)::DATE AS admission_week,
+    dept.department,
+    COUNT(CASE WHEN a.admission_type = 'Emergency' THEN 1 END) AS emergency_arrivals_count,
+    ROUND(AVG(a.wait_minutes), 2) AS avg_wait_time_minutes,
+    ROUND(AVG(a.severity_score), 2) AS avg_severity_score,
+    ROUND(SUM(b.charge_amount), 2) AS billing_weekly_charges
+FROM analytics.admissions a
+JOIN analytics.departments dept ON a.department_id = dept.department_id
+JOIN analytics.billing b ON a.admission_id = b.admission_id
+GROUP BY 1, 2
+ORDER BY 1, 2;
+
+
+-- ----------------------------------------------------------------------------
+-- QUERY 18: Doctor Care Quality vs Operational Outcomes
+-- Purpose: Quantify care quality per doctor by linking patient satisfaction
+-- surveys, patient clinical volumes, and 30d readmission rates.
+-- ----------------------------------------------------------------------------
+SELECT
+    d.doctor_name,
+    dept.department,
+    COUNT(a.admission_id) AS total_patients_treated,
+    ROUND(AVG(s.satisfaction_score), 1) AS mean_satisfaction_score,
+    ROUND(100.0 * SUM(CASE WHEN a.readmission_30d THEN 1 ELSE 0 END) / COUNT(a.admission_id), 2) AS doctor_readmission_rate_pct,
+    DENSE_RANK() OVER (
+        PARTITION BY dept.department_id
+        ORDER BY AVG(s.satisfaction_score) DESC
+    ) AS satisfaction_rank_in_department
+FROM analytics.doctors d
+JOIN analytics.departments dept ON d.department_id = dept.department_id
+JOIN analytics.admissions a ON d.doctor_id = a.doctor_id
+LEFT JOIN analytics.satisfaction_surveys s ON a.admission_id = s.admission_id
+GROUP BY 1, 2, dept.department_id
+HAVING COUNT(a.admission_id) > 10
+ORDER BY department, satisfaction_rank_in_department;
+
+
+-- ----------------------------------------------------------------------------
+-- QUERY 19: Emergency Department Temporal Bottlenecks
+-- Purpose: Analyze daily billing, wait times, and LOS values specifically for
+-- emergency rooms to locate staff scheduling inefficiencies.
+-- ----------------------------------------------------------------------------
+SELECT
+    TO_CHAR(admission_date, 'Day') AS day_of_week,
+    EXTRACT(DOW FROM admission_date) AS day_index,
+    COUNT(admission_id) AS total_emergency_arrivals,
+    ROUND(AVG(wait_minutes), 1) AS mean_wait_time_mins,
+    ROUND(AVG(length_of_stay), 2) AS mean_length_of_stay_days,
+    ROUND(SUM(b.charge_amount), 2) AS gross_charges_generated
+FROM analytics.admissions a
+JOIN analytics.billing b ON a.admission_id = b.admission_id
+WHERE a.admission_type = 'Emergency'
+GROUP BY 1, 2
+ORDER BY day_index;
+
+
+-- ----------------------------------------------------------------------------
+-- QUERY 20: YoY Operational Clinical & Treatment Cost Comparisons
+-- Purpose: Compare treatment costs year-over-year at a departmental level to
+-- identify inflationary operational overheads.
+-- ----------------------------------------------------------------------------
+WITH annual_billing AS (
     SELECT
-        b.admission_id,
-        b.charge_amount,
-        COALESCE(SUM(t.treatment_cost), 0) AS aggregated_treatment_costs
+        EXTRACT(YEAR FROM a.admission_date) AS fiscal_year,
+        dept.department,
+        SUM(b.cost_amount) AS total_costs,
+        AVG(b.cost_amount) AS avg_cost_per_patient
     FROM analytics.billing b
-    LEFT JOIN analytics.treatments t ON b.admission_id = t.admission_id
-    GROUP BY b.admission_id, b.charge_amount
+    JOIN analytics.admissions a ON b.admission_id = a.admission_id
+    JOIN analytics.departments dept ON b.department_id = dept.department_id
+    GROUP BY 1, 2
 )
 SELECT
-    admission_id,
-    ROUND(charge_amount::NUMERIC, 2) AS charge_amount,
-    ROUND(aggregated_treatment_costs::NUMERIC, 2) AS aggregated_procedure_costs,
-    ROUND((aggregated_treatment_costs - charge_amount)::NUMERIC, 2) AS unbilled_clinical_costs
-FROM billing_versus_procedures
-WHERE aggregated_treatment_costs > charge_amount
-ORDER BY unbilled_clinical_costs DESC;
+    curr.department,
+    ROUND(prev.total_costs, 2) AS costs_2023,
+    ROUND(curr.total_costs, 2) AS costs_2024,
+    ROUND(curr.total_costs - prev.total_costs, 2) AS yoy_cost_difference,
+    ROUND(100.0 * (curr.total_costs - prev.total_costs) / prev.total_costs, 2) AS yoy_cost_inflation_pct
+FROM annual_billing curr
+JOIN annual_billing prev ON curr.department = prev.department
+    AND curr.fiscal_year = 2024
+    AND prev.fiscal_year = 2023
+ORDER BY yoy_cost_inflation_pct DESC;
 
 
--- -----------------------------------------------------------------------------------------
--- QUERY 15: Readmission Financial Penalty Forecasts
--- Purpose: Projections of hospital readmission financial losses under clinical penalty rules.
--- -----------------------------------------------------------------------------------------
+-- ----------------------------------------------------------------------------
+-- QUERY 21: Rolling 7-Day Wait Time Averages (Operational Flow)
+-- Purpose: Extract rolling average patterns of patient wait times to identify
+-- queue spikes and patient blockages.
+-- ----------------------------------------------------------------------------
+WITH daily_wait_times AS (
+    SELECT
+        admission_date,
+        COUNT(admission_id) AS admissions_count,
+        AVG(wait_minutes) AS avg_wait_mins
+    FROM analytics.admissions
+    GROUP BY 1
+)
 SELECT
-    d.department,
-    COUNT(a.admission_id) AS total_discharged_cases,
-    SUM(CASE WHEN a.readmission_30d = 1 THEN 1 ELSE 0 END) AS readmissions_30d,
-    ROUND(SUM(CASE WHEN a.readmission_30d = 1 THEN b.charge_amount ELSE 0 END)::NUMERIC, 2) AS gross_readmission_cost,
-    -- Assume standard penalty of 3% on total charges for departments with readmissions exceeding 12%
-    ROUND(
-        (CASE
-            WHEN (SUM(CASE WHEN a.readmission_30d = 1 THEN 1 ELSE 0 END) * 100.0 / COUNT(a.admission_id)) > 12.0
-            THEN SUM(b.charge_amount) * 0.03
-            ELSE 0
-         END)::NUMERIC,
-        2
-    ) AS estimated_3pct_readmission_penalty
-FROM analytics.departments d
-JOIN analytics.admissions a ON d.department_id = a.department_id
-JOIN analytics.billing b ON a.admission_id = b.admission_id
-GROUP BY d.department
-ORDER BY estimated_3pct_readmission_penalty DESC;
+    admission_date,
+    admissions_count,
+    ROUND(avg_wait_mins, 2) AS daily_avg_wait,
+    ROUND(AVG(avg_wait_mins) OVER (
+        ORDER BY admission_date
+        ROWS BETWEEN 6 PRECEDING AND CURRENT ROW
+    ), 2) AS rolling_7d_wait_avg
+FROM daily_wait_times
+ORDER BY admission_date;
 
 
--- -----------------------------------------------------------------------------------------
--- QUERY 16: Readmissions by Admitting Doctor Severity and Wait Times
--- Purpose: Evaluates whether readmission risk is correlated with high clinical workloads
---          or excessive initial wait times.
--- -----------------------------------------------------------------------------------------
+-- ----------------------------------------------------------------------------
+-- QUERY 22: Unified Executive Performance Scorecard
+-- Purpose: Consolidate clinical, operational, financial, and feedback indicators
+-- into a single, comprehensive hospital dashboard.
+-- ----------------------------------------------------------------------------
 SELECT
-    dr.doctor_name,
-    COUNT(a.admission_id) AS patient_cases,
-    ROUND(AVG(a.wait_minutes)::NUMERIC, 1) AS average_patient_wait_minutes,
-    ROUND(AVG(a.severity_score)::NUMERIC, 1) AS average_severity_score,
-    ROUND(
-        (SUM(CASE WHEN a.readmission_30d = 1 THEN 1 ELSE 0 END) * 100.0 /
-         NULLIF(COUNT(a.admission_id), 0))::NUMERIC,
-        1
-    ) AS readmission_rate_pct
-FROM analytics.doctors dr
-JOIN analytics.admissions a ON dr.doctor_id = a.doctor_id
-GROUP BY dr.doctor_name
-HAVING COUNT(a.admission_id) >= 5
-ORDER BY readmission_rate_pct DESC;
-
-
--- -----------------------------------------------------------------------------------------
--- QUERY 17: Departmental Resource Productivity Index
--- Purpose: Highlights the operational load relative to patient satisfaction.
--- -----------------------------------------------------------------------------------------
-SELECT
-    d.department,
-    COUNT(a.admission_id) AS total_admissions,
-    ROUND(AVG(a.length_of_stay)::NUMERIC, 1) AS average_length_of_stay,
-    ROUND(AVG(s.satisfaction_score)::NUMERIC, 1) AS average_satisfaction,
-    -- Productivity score: Satisfaction divided by average length of stay
-    ROUND(
-        (AVG(s.satisfaction_score) / NULLIF(AVG(a.length_of_stay), 0))::NUMERIC,
-        2
-    ) AS operational_efficiency_index
-FROM analytics.departments d
-LEFT JOIN analytics.admissions a ON d.department_id = a.department_id
-LEFT JOIN analytics.satisfaction_surveys s ON a.admission_id = s.admission_id
-GROUP BY d.department
-ORDER BY operational_efficiency_index DESC;
-
-
--- -----------------------------------------------------------------------------------------
--- QUERY 18: Patient Retention & City Distribution
--- Purpose: Identifies demographic geographical locations where patients reside.
--- -----------------------------------------------------------------------------------------
-SELECT
-    p.city,
-    COUNT(a.admission_id) AS total_patient_admissions,
-    ROUND(SUM(b.charge_amount)::NUMERIC, 2) AS total_geographic_billings,
-    ROUND(AVG(b.charge_amount)::NUMERIC, 2) AS average_bill_per_patient
-FROM analytics.patients p
-JOIN analytics.admissions a ON p.patient_id = a.patient_id
-JOIN analytics.billing b ON a.admission_id = b.admission_id
-GROUP BY p.city
-ORDER BY total_patient_admissions DESC;
-
-
--- -----------------------------------------------------------------------------------------
--- QUERY 19: Staffed Bed Allocation vs. Admission Rates
--- Purpose: Investigates if hospitals over-allocate staffed beds to underperforming lines.
--- -----------------------------------------------------------------------------------------
-SELECT
-    d.department,
-    b.staffed_beds,
-    COUNT(a.admission_id) AS total_admissions,
-    ROUND((COUNT(a.admission_id) * 1.0 / NULLIF(b.staffed_beds, 0))::NUMERIC, 1) AS admissions_per_staffed_bed
-FROM analytics.departments d
-JOIN analytics.beds b ON d.department_id = b.department_id
-LEFT JOIN analytics.admissions a ON d.department_id = a.department_id
-GROUP BY d.department, b.staffed_beds
-ORDER BY admissions_per_staffed_bed DESC;
-
-
--- -----------------------------------------------------------------------------------------
--- QUERY 20: Cost-To-Charge Ratio (CCR) by Clinical Line
--- Purpose: Standard health industry metrics showing operating cost structures.
--- -----------------------------------------------------------------------------------------
-SELECT
-    d.department,
-    ROUND(SUM(b.charge_amount)::NUMERIC, 2) AS total_hospital_charges,
-    ROUND(SUM(b.cost_amount)::NUMERIC, 2) AS total_internal_costs,
-    ROUND(
-        (SUM(b.cost_amount) / NULLIF(SUM(b.charge_amount), 0))::NUMERIC,
-        3
-    ) AS cost_to_charge_ratio_ccr
-FROM analytics.departments d
-JOIN analytics.billing b ON d.department_id = b.department_id
-GROUP BY d.department
-ORDER BY cost_to_charge_ratio_ccr ASC;
-
-
--- -----------------------------------------------------------------------------------------
--- QUERY 21: High-Risk Readmission Profile Flags (Seniors with Severity Score > 4)
--- Purpose: Generates care list of geriatric patients at risk of chronic readmission.
--- -----------------------------------------------------------------------------------------
-SELECT
-    p.patient_name,
-    EXTRACT(YEAR FROM age('2026-01-01'::DATE, p.birth_date::DATE)) AS patient_age,
-    d.department,
-    a.length_of_stay,
-    a.severity_score,
-    a.wait_minutes AS er_wait_minutes
+    dept.department,
+    COUNT(a.admission_id) AS total_patients_discharged,
+    ROUND(AVG(a.length_of_stay), 2) AS avg_los_days,
+    ROUND(AVG(a.wait_minutes), 1) AS avg_wait_time_minutes,
+    ROUND(AVG(s.satisfaction_score), 1) AS avg_patient_satisfaction_score,
+    ROUND(SUM(b.charge_amount), 2) AS total_gross_billings,
+    ROUND(100.0 * (SUM(b.charge_amount - b.cost_amount) / SUM(b.charge_amount)), 2) AS net_profit_margin_pct
 FROM analytics.admissions a
-JOIN analytics.patients p ON a.patient_id = p.patient_id
-JOIN analytics.departments d ON a.department_id = d.department_id
-WHERE EXTRACT(YEAR FROM age('2026-01-01'::DATE, p.birth_date::DATE)) >= 65
-  AND a.severity_score >= 4
-  AND a.status = 'Active' -- assuming 'Active' represents currently active patients or active stays
-ORDER BY a.severity_score DESC, patient_age DESC
-LIMIT 50;
-
-
--- -----------------------------------------------------------------------------------------
--- QUERY 22: Consolidated Healthcare Operational Performance Matrix
--- Purpose: Combines geographical patient volume, revenue numbers, readmissions,
---          and beds into a single senior operational summary report.
--- -----------------------------------------------------------------------------------------
-SELECT
-    d.department,
-    COUNT(a.admission_id) AS total_cases,
-    ROUND(SUM(b.charge_amount)::NUMERIC, 2) AS aggregated_charges,
-    ROUND(AVG(a.length_of_stay)::NUMERIC, 1) AS avg_los,
-    ROUND((SUM(CASE WHEN a.readmission_30d = 1 THEN 1 ELSE 0 END) * 100.0 / COUNT(*))::NUMERIC, 1) AS readmission_rate_pct,
-    ROUND(AVG(s.satisfaction_score)::NUMERIC, 1) AS patient_satisfaction
-FROM analytics.departments d
-LEFT JOIN analytics.admissions a ON d.department_id = a.department_id
-LEFT JOIN analytics.billing b ON a.admission_id = b.admission_id
+JOIN analytics.departments dept ON a.department_id = dept.department_id
+JOIN analytics.billing b ON a.admission_id = b.admission_id
 LEFT JOIN analytics.satisfaction_surveys s ON a.admission_id = s.admission_id
-GROUP BY d.department
-ORDER BY total_cases DESC;
+GROUP BY 1
+ORDER BY total_patients_discharged DESC;
