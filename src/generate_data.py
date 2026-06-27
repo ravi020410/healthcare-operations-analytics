@@ -1,14 +1,16 @@
-"""Regenerate synthetic data for Healthcare Analytics Dashboard.
-
-Install requirements first:
-    python -m pip install -r requirements.txt
-
-This portfolio build generated data from tools/generate_portfolio.py. This
-project-local script documents the rerun entry point for reviewers.
 """
+Data Generation Proxy Script
+Author: Ravikant Yadav
+Description: Proxies call to scripts/generate_data.py to ensure zero duplicate code.
+"""
+
+import sys
 from pathlib import Path
 import subprocess
-import sys
 
-ROOT = Path(__file__).resolve().parents[2]
-subprocess.run([sys.executable, str(ROOT / "tools" / "generate_portfolio.py")], check=True)
+if __name__ == "__main__":
+    ROOT = Path(__file__).resolve().parents[1]
+    script_path = ROOT / "scripts" / "generate_data.py"
+    print(f"Proxy: Executing data generation at {script_path}")
+    result = subprocess.run([sys.executable, str(script_path)], capture_output=False)
+    sys.exit(result.returncode)

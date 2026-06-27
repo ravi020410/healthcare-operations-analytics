@@ -8,6 +8,6 @@ department_id,department,service_line
 7,ICU,Acute
 8,Surgery,Surgical
 9,Radiology,Diagnostic
-10,Maternity,Primary
-11,General Medicine,Primary
-12,Rehabilitation,Recovery
+10,Gastroenterology,Specialty
+11,Urology,Specialty
+12,General Medicine,Primary

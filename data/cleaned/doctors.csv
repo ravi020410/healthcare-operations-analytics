@@ -1,361 +1,351 @@
 doctor_id,doctor_name,department_id,employment_type
-1,Ishaan Chen,3,Full Time
-2,Samuel Brown,11,Full Time
-3,Amelia Miller,10,Part Time
-4,Liam Walker,6,Contract
-5,Mia Harris,12,Full Time
-6,Zara Lee,2,Part Time
-7,Diya Robinson,7,Part Time
-8,Amelia Walker,9,Part Time
-9,Liam Rodriguez,5,Contract
-10,Hannah Wilson,10,Part Time
-11,Aisha Garcia,5,Full Time
-12,Ishaan Shah,6,Contract
-13,Sara Patel,4,Full Time
-14,Riya Lee,9,Full Time
-15,Sophia Taylor,1,Full Time
-16,Ishaan Garcia,3,Part Time
-17,Sara Smith,12,Full Time
-18,Benjamin Miller,7,Full Time
-19,Maya Smith,3,Full Time
-20,Rahul Miller,3,Full Time
-21,Avery Garcia,8,Part Time
-22,Liam Mehta,11,Full Time
-23,Olivia Mehta,9,Full Time
-24,Liam Taylor,9,Full Time
-25,Jacob Baker,8,Full Time
-26,Hannah Mehta,9,Part Time
-27,Benjamin Adams,7,Full Time
-28,Jacob Shah,4,Full Time
-29,Vihaan Patel,5,Full Time
-30,Leah Wilson,1,Part Time
-31,Leah Johnson,10,Full Time
-32,Chloe Walker,12,Full Time
-33,Rahul Robinson,9,Part Time
-34,Gabriel Shah,4,Full Time
-35,Hannah Smith,7,Part Time
-36,Vihaan Thomas,5,Full Time
-37,Maya Yadav,1,Part Time
-38,Amelia Young,10,Part Time
-39,Zara Chen,12,Part Time
-40,Chloe Yadav,10,Full Time
-41,Leah Patel,10,Contract
-42,Daniel Nguyen,4,Full Time
-43,Sophia Davis,8,Full Time
-44,Mia Patel,8,Full Time
-45,Olivia Patel,3,Contract
-46,Benjamin Kapoor,5,Part Time
-47,Fatima Rodriguez,2,Full Time
-48,Arjun Miller,3,Part Time
-49,Fatima Harris,5,Part Time
-50,Aisha Khan,7,Full Time
-51,Hannah Patel,10,Full Time
-52,Amelia Davis,11,Full Time
-53,Fatima Harris,8,Part Time
-54,Avery Chen,1,Full Time
-55,Aarav Walker,10,Full Time
-56,Olivia Yadav,2,Full Time
-57,Samuel Brown,10,Full Time
-58,Mia Williams,12,Full Time
-59,Leah Rodriguez,4,Contract
-60,Sophia Wilson,2,Full Time
-61,Liam Williams,7,Full Time
-62,Mia Khan,7,Contract
-63,Diya Lee,4,Part Time
-64,Daniel Kim,12,Full Time
-65,Kabir Young,1,Contract
-66,Sophia Miller,7,Full Time
-67,Priya Rodriguez,2,Full Time
-68,Jacob Williams,4,Full Time
-69,Hannah Kapoor,5,Full Time
-70,Fatima Kim,4,Full Time
-71,Ishaan Gupta,2,Full Time
-72,Fatima Williams,1,Full Time
-73,Jacob Brown,10,Full Time
-74,Chloe Wilson,7,Full Time
-75,Ishaan Harris,3,Full Time
-76,Sophia Wilson,7,Part Time
-77,Zara Thomas,6,Full Time
-78,Arjun Chen,8,Full Time
-79,Chloe Rodriguez,11,Full Time
-80,Sophia Lee,11,Full Time
-81,Zara Johnson,10,Full Time
-82,Amelia Smith,10,Full Time
-83,Riya Baker,7,Contract
-84,Maya Rodriguez,7,Full Time
-85,Olivia Yadav,12,Contract
-86,Jacob Robinson,7,Full Time
-87,Gabriel Wilson,12,Full Time
-88,Arjun Kapoor,3,Full Time
-89,Amelia Kapoor,6,Full Time
-90,Avery Patel,12,Full Time
-91,Sara Nguyen,12,Full Time
-92,Avery Robinson,6,Part Time
-93,Olivia Thomas,6,Full Time
-94,Chloe Singh,8,Full Time
-95,Zara Mehta,9,Full Time
-96,Maya Kim,10,Full Time
-97,Arjun Miller,2,Part Time
-98,Noah Gupta,8,Full Time
-99,Noah Baker,11,Full Time
-100,Vihaan Williams,11,Part Time
-101,Aisha Lee,2,Full Time
-102,Arjun Thomas,11,Part Time
-103,Chloe Miller,12,Full Time
-104,Kabir Williams,8,Part Time
-105,Olivia Thomas,7,Full Time
-106,Rahul Thomas,7,Full Time
-107,Sara Thomas,1,Full Time
-108,Avery Chen,3,Full Time
-109,Fatima Miller,6,Part Time
-110,Fatima Kim,5,Part Time
-111,Maya Baker,8,Full Time
-112,Vihaan Robinson,8,Part Time
-113,Noah Shah,4,Full Time
-114,Samuel Chen,9,Full Time
-115,Liam Brown,5,Full Time
-116,Rahul Patel,3,Full Time
-117,Sara Walker,6,Full Time
-118,Aarav Young,3,Full Time
-119,Olivia Gupta,12,Full Time
-120,Mia Lopez,5,Full Time
-121,Riya Shah,5,Full Time
-122,Aisha Kapoor,1,Full Time
-123,Sophia Patel,6,Full Time
-124,Liam Patel,7,Full Time
-125,Priya Chen,10,Part Time
-126,Jacob Thomas,2,Full Time
-127,Aarav Yadav,2,Full Time
-128,Ishaan Miller,11,Full Time
-129,Chloe Robinson,1,Full Time
-130,Ishaan Singh,12,Full Time
-131,Samuel Brown,1,Contract
-132,Diya Kim,3,Full Time
-133,Leah Young,9,Contract
-134,Priya Taylor,2,Part Time
-135,Arjun Kim,7,Part Time
-136,Riya Nguyen,3,Full Time
-137,Amelia Brown,6,Full Time
-138,Aarav Kim,2,Contract
-139,Noah Johnson,2,Full Time
-140,Benjamin Miller,3,Full Time
-141,Sophia Harris,1,Contract
-142,Ethan Smith,7,Part Time
-143,Rahul Adams,2,Full Time
-144,Gabriel Khan,4,Full Time
-145,Riya Young,5,Full Time
-146,Daniel Robinson,4,Full Time
-147,Sophia Chen,10,Full Time
-148,Gabriel Nguyen,12,Full Time
-149,Hannah Patel,9,Full Time
-150,Arjun Johnson,7,Full Time
-151,Daniel Miller,4,Part Time
-152,Sara Kim,9,Part Time
-153,Sophia Singh,10,Full Time
-154,Gabriel Nguyen,11,Contract
-155,Benjamin Singh,8,Full Time
-156,Aarav Wilson,12,Part Time
-157,Avery Khan,4,Full Time
-158,Noah Kapoor,1,Full Time
-159,Chloe Khan,4,Full Time
-160,Fatima Kim,8,Full Time
-161,Maya Miller,5,Full Time
-162,Ethan Williams,8,Full Time
-163,Leah Adams,6,Full Time
-164,Arjun Shah,10,Full Time
-165,Ethan Kapoor,10,Full Time
-166,Arjun Kapoor,2,Full Time
-167,Priya Taylor,9,Full Time
-168,Fatima Thomas,1,Full Time
-169,Benjamin Johnson,8,Full Time
-170,Riya Lee,5,Full Time
-171,Aarav Kim,3,Full Time
-172,Vihaan Smith,2,Part Time
-173,Avery Baker,6,Full Time
-174,Aarav Taylor,4,Full Time
-175,Kabir Rodriguez,3,Full Time
-176,Riya Kim,2,Full Time
-177,Jacob Lopez,4,Full Time
-178,Riya Rodriguez,9,Full Time
-179,Riya Rodriguez,8,Full Time
-180,Priya Walker,5,Full Time
-181,Ethan Baker,2,Full Time
-182,Jacob Johnson,10,Full Time
-183,Riya Shah,4,Full Time
-184,Noah Davis,12,Part Time
-185,Sophia Taylor,10,Full Time
-186,Gabriel Adams,1,Full Time
-187,Kabir Johnson,7,Full Time
-188,Maya Baker,1,Full Time
-189,Fatima Davis,2,Part Time
-190,Maya Harris,6,Contract
-191,Amelia Chen,12,Full Time
-192,Riya Garcia,8,Part Time
-193,Avery Smith,7,Contract
-194,Diya Robinson,6,Full Time
-195,Chloe Kim,12,Contract
-196,Amelia Young,1,Full Time
-197,Rahul Miller,5,Full Time
-198,Benjamin Brown,8,Part Time
-199,Riya Garcia,5,Part Time
-200,Fatima Robinson,12,Full Time
-201,Fatima Wilson,11,Full Time
-202,Sara Lopez,3,Part Time
-203,Diya Rodriguez,5,Full Time
-204,Zara Mehta,3,Full Time
-205,Mia Walker,4,Full Time
-206,Fatima Lopez,6,Part Time
-207,Riya Smith,2,Full Time
-208,Zara Nguyen,2,Part Time
-209,Zara Robinson,11,Full Time
-210,Aisha Lee,5,Full Time
-211,Chloe Chen,5,Full Time
-212,Rahul Yadav,6,Full Time
-213,Noah Harris,2,Contract
-214,Riya Yadav,5,Full Time
-215,Amelia Gupta,12,Full Time
-216,Arjun Johnson,7,Full Time
-217,Maya Mehta,10,Full Time
-218,Vihaan Davis,4,Full Time
-219,Aisha Chen,4,Full Time
-220,Samuel Wilson,5,Full Time
-221,Avery Yadav,9,Contract
-222,Diya Smith,2,Full Time
-223,Noah Baker,12,Full Time
-224,Jacob Chen,9,Part Time
-225,Ishaan Wilson,3,Full Time
-226,Aisha Thomas,1,Contract
-227,Avery Rodriguez,11,Part Time
-228,Kabir Gupta,9,Full Time
-229,Ethan Adams,11,Contract
-230,Benjamin Young,12,Full Time
-231,Aisha Young,7,Contract
-232,Arjun Shah,12,Full Time
-233,Liam Young,5,Full Time
-234,Amelia Kapoor,4,Full Time
-235,Aisha Mehta,2,Full Time
-236,Vihaan Taylor,6,Full Time
-237,Liam Nguyen,5,Full Time
-238,Gabriel Lopez,5,Contract
-239,Rahul Patel,4,Full Time
-240,Olivia Lee,8,Full Time
-241,Ethan Singh,7,Full Time
-242,Noah Kim,11,Part Time
-243,Priya Lee,5,Part Time
-244,Kabir Mehta,7,Full Time
-245,Zara Patel,6,Full Time
-246,Noah Lee,5,Full Time
-247,Ishaan Walker,12,Part Time
-248,Benjamin Harris,1,Full Time
-249,Kabir Garcia,6,Full Time
-250,Sara Shah,6,Full Time
-251,Noah Patel,3,Full Time
-252,Aarav Chen,4,Part Time
-253,Amelia Robinson,8,Full Time
-254,Aisha Kapoor,1,Full Time
-255,Gabriel Walker,8,Full Time
-256,Daniel Garcia,1,Full Time
-257,Aisha Robinson,5,Part Time
-258,Maya Lopez,9,Contract
-259,Noah Wilson,1,Part Time
-260,Fatima Williams,8,Full Time
-261,Samuel Rodriguez,8,Full Time
-262,Priya Yadav,9,Full Time
-263,Benjamin Miller,9,Full Time
-264,Sara Young,2,Full Time
-265,Ishaan Williams,7,Full Time
-266,Chloe Shah,1,Full Time
-267,Jacob Lopez,2,Full Time
-268,Vihaan Baker,1,Full Time
-269,Vihaan Robinson,10,Full Time
-270,Hannah Chen,5,Part Time
-271,Ishaan Kim,12,Full Time
-272,Sophia Garcia,1,Full Time
-273,Hannah Patel,6,Full Time
-274,Gabriel Mehta,8,Full Time
-275,Priya Lopez,4,Full Time
-276,Benjamin Thomas,2,Full Time
-277,Aisha Harris,7,Full Time
-278,Benjamin Taylor,10,Contract
-279,Daniel Lee,6,Full Time
-280,Mia Kim,5,Full Time
-281,Olivia Young,9,Full Time
-282,Sophia Lopez,5,Full Time
-283,Riya Adams,1,Full Time
-284,Liam Johnson,1,Part Time
-285,Ethan Adams,2,Full Time
-286,Aarav Khan,7,Full Time
-287,Ethan Chen,2,Contract
-288,Kabir Walker,6,Full Time
-289,Riya Williams,4,Full Time
-290,Kabir Shah,6,Part Time
-291,Riya Davis,8,Full Time
-292,Priya Adams,8,Full Time
-293,Jacob Gupta,11,Part Time
-294,Benjamin Davis,12,Full Time
-295,Arjun Adams,8,Full Time
-296,Priya Williams,1,Part Time
-297,Liam Adams,4,Full Time
-298,Liam Nguyen,2,Full Time
-299,Amelia Davis,1,Part Time
-300,Daniel Robinson,10,Full Time
-301,Aarav Brown,3,Contract
-302,Fatima Robinson,11,Contract
-303,Liam Thomas,11,Part Time
-304,Aarav Robinson,12,Full Time
-305,Sophia Davis,6,Full Time
-306,Ethan Patel,11,Full Time
-307,Ishaan Baker,12,Full Time
-308,Benjamin Johnson,2,Full Time
-309,Rahul Lee,3,Part Time
-310,Gabriel Taylor,2,Full Time
-311,Zara Nguyen,7,Full Time
-312,Ishaan Brown,1,Full Time
-313,Vihaan Williams,4,Full Time
-314,Sara Gupta,5,Full Time
-315,Daniel Mehta,8,Full Time
-316,Riya Davis,5,Full Time
-317,Diya Robinson,2,Full Time
-318,Chloe Davis,4,Full Time
-319,Samuel Patel,12,Full Time
-320,Diya Miller,1,Part Time
-321,Fatima Yadav,6,Full Time
-322,Fatima Johnson,9,Full Time
-323,Noah Lee,8,Full Time
-324,Vihaan Davis,8,Full Time
-325,Samuel Singh,7,Full Time
-326,Priya Mehta,9,Part Time
-327,Olivia Kapoor,8,Full Time
-328,Sophia Kapoor,2,Full Time
-329,Priya Davis,4,Full Time
-330,Fatima Khan,8,Full Time
-331,Fatima Lee,7,Full Time
-332,Arjun Lee,6,Full Time
-333,Arjun Miller,9,Part Time
-334,Aarav Patel,8,Full Time
-335,Mia Patel,12,Full Time
-336,Riya Harris,5,Full Time
-337,Daniel Robinson,2,Full Time
-338,Priya Kapoor,11,Full Time
-339,Avery Shah,10,Full Time
-340,Jacob Walker,5,Contract
-341,Aisha Yadav,12,Full Time
-342,Sophia Miller,11,Contract
-343,Ishaan Miller,10,Contract
-344,Maya Davis,7,Full Time
-345,Vihaan Adams,11,Full Time
-346,Avery Johnson,4,Contract
-347,Maya Khan,11,Full Time
-348,Ishaan Kim,2,Full Time
-349,Mia Lee,6,Full Time
-350,Gabriel Garcia,11,Full Time
-351,Aisha Singh,6,Full Time
-352,Kabir Shah,7,Full Time
-353,Amelia Wilson,8,Full Time
-354,Olivia Walker,8,Contract
-355,Vihaan Yadav,2,Full Time
-356,Vihaan Johnson,8,Part Time
-357,Daniel Robinson,3,Full Time
-358,Diya Garcia,2,Part Time
-359,Olivia Harris,8,Part Time
-360,Benjamin Miller,8,Full Time
+1,Dr. Allison Hill,12,Full Time
+2,Dr. Noah Rhodes,12,Full Time
+3,Dr. Angie Henderson,12,Full Time
+4,Dr. Daniel Wagner,11,Full Time
+5,Dr. Cristian Santos,10,Full Time
+6,Dr. Connie Lawrence,12,Full Time
+7,Dr. Abigail Shaffer,3,Full Time
+8,Dr. Gina Moore,4,Full Time
+9,Dr. Gabrielle Davis,3,Contract
+10,Dr. Ryan Munoz,7,Full Time
+11,Dr. Monica Herrera,7,Full Time
+12,Dr. Jamie Arnold,9,On-Call
+13,Dr. Lisa Hensley,2,Full Time
+14,Dr. Michele Williams,10,Full Time
+15,Dr. Dylan Miller,4,Full Time
+16,Dr. Brian Ramirez,12,Full Time
+17,Dr. Holly Wood,8,Full Time
+18,Dr. Derek Zuniga,1,Full Time
+19,Dr. Lisa Jackson,8,Part Time
+20,Dr. Carla Gray,6,Full Time
+21,Dr. Margaret Hawkins DDS,4,Full Time
+22,Dr. Patty Perez,2,Part Time
+23,Dr. Ethan Adams,2,Full Time
+24,Dr. Tommy Walter,4,Full Time
+25,Dr. Matthew Foster,8,Full Time
+26,Dr. Judy Baker,12,Full Time
+27,Dr. Justin Baker,8,Part Time
+28,Dr. Stephanie Ross,2,Full Time
+29,Dr. Zachary Hicks,8,Full Time
+30,Dr. Anthony Rodriguez,12,Full Time
+31,Dr. Rebecca Henderson,9,Full Time
+32,Dr. James Ferrell,1,Full Time
+33,Dr. Tricia Valencia,9,Part Time
+34,Dr. Nathan Maldonado,12,Full Time
+35,Dr. Debra Davidson,11,Full Time
+36,Dr. Jeffrey Chavez,8,Part Time
+37,Dr. Sherri Baker,1,Full Time
+38,Dr. Cassandra Gaines,10,Full Time
+39,Dr. Elizabeth Fowler,9,Contract
+40,Dr. Brittany Farmer,9,Full Time
+41,Dr. Paula Moreno,2,Full Time
+42,Dr. Fred Smith,7,Full Time
+43,Dr. Sherry Decker,8,Full Time
+44,Dr. Anthony Humphrey,12,Full Time
+45,Dr. Angelica Tucker,11,Full Time
+46,Dr. Philip Cannon,3,Full Time
+47,Dr. John Pierce,3,Part Time
+48,Dr. Shane Henderson,10,Full Time
+49,Dr. Joshua Blair,7,Full Time
+50,Dr. Eric Carney,10,Full Time
+51,Dr. Jessica Holmes,3,Full Time
+52,Dr. Danny Morgan,7,Full Time
+53,Dr. Crystal Robinson,4,Contract
+54,Dr. Mark Perez,7,Full Time
+55,Dr. Shannon Jones,11,Full Time
+56,Dr. Michael Lewis,7,Full Time
+57,Dr. Timothy Duncan,6,Contract
+58,Dr. Richard Aguirre,10,Part Time
+59,Dr. Brent Jordan,9,Full Time
+60,Dr. John Daniel,12,Part Time
+61,Dr. Victoria Garcia,12,Full Time
+62,Dr. Gerald Hensley,11,Full Time
+63,Dr. Connor West,7,Contract
+64,Dr. Donald Wright,7,Contract
+65,Dr. Jessica Callahan,1,Full Time
+66,Dr. Amber Kidd,9,Part Time
+67,Dr. Tracy House,9,Full Time
+68,Dr. Carol Tucker,6,Full Time
+69,Dr. James Brown,9,Full Time
+70,Dr. William Baker,1,Full Time
+71,Dr. Jordan Henderson,12,Full Time
+72,Dr. Whitney Peters,11,Full Time
+73,Dr. Brittney Phillips,8,Part Time
+74,Dr. Lauren Daniels,1,Full Time
+75,Dr. Amy Silva,10,On-Call
+76,Dr. Sarah Moore,7,Full Time
+77,Dr. Angela Lopez,1,Full Time
+78,Dr. Megan Young,8,Full Time
+79,Dr. Steve Sanchez,1,On-Call
+80,Dr. Lisa Barnes,12,Full Time
+81,Dr. Kelly Donovan,5,Full Time
+82,Dr. Mike Allen,1,Full Time
+83,Dr. Michael Evans,2,Full Time
+84,Dr. Paul Jones,10,On-Call
+85,Dr. Zachary Ferrell,7,Full Time
+86,Dr. Daniel Baker,11,Full Time
+87,Dr. Shirley Suarez,1,Part Time
+88,Dr. Christopher Bass,8,Full Time
+89,Dr. Lisa Archer,2,Full Time
+90,Dr. Aimee Montoya,11,Part Time
+91,Dr. Matthew Mcmillan,1,Full Time
+92,Dr. Brian Rodriguez,11,Full Time
+93,Dr. Denise Jacobs,3,Full Time
+94,Dr. Christina Walters,11,Full Time
+95,Dr. John Whitehead,10,Full Time
+96,Dr. Anna Henderson,3,Full Time
+97,Dr. Aaron Wise,7,Full Time
+98,Dr. Deborah Figueroa,1,Full Time
+99,Dr. Jessica Smith,7,Contract
+100,Dr. Stephen Mckee,1,Full Time
+101,Dr. Sandra Aguilar,9,Full Time
+102,Dr. Cameron Parker,7,Full Time
+103,Dr. Rebecca Valencia,10,Full Time
+104,Dr. Christine Wright,12,Full Time
+105,Dr. Richard Henson,9,Full Time
+106,Dr. Marc Moore,1,Full Time
+107,Dr. Sharon Cherry,12,Full Time
+108,Dr. Sierra Johnson,11,Full Time
+109,Dr. Evelyn Galvan,9,Full Time
+110,Dr. Sharon Cochran,3,Contract
+111,Dr. Richard Rodriguez,6,Part Time
+112,Dr. Shannon Walker,8,Contract
+113,Dr. Julia Torres,1,Full Time
+114,Dr. Crystal Johnson,6,Full Time
+115,Dr. Garrett Lin,3,Full Time
+116,Dr. Diana May,9,Full Time
+117,Dr. William Herrera,2,Full Time
+118,Dr. Ashley Waller,2,Full Time
+119,Dr. Victor Baker,3,Full Time
+120,Dr. Jeffrey Chandler,9,Full Time
+121,Dr. Larry Dixon,4,Full Time
+122,Dr. Kenneth Scott,5,Full Time
+123,Dr. April Frost,8,Full Time
+124,Dr. Michelle Harmon,7,Part Time
+125,Dr. Helen Jones,1,Full Time
+126,Dr. Erin Edwards,11,Full Time
+127,Dr. Michelle Evans,7,Full Time
+128,Dr. Jason Powell,6,On-Call
+129,Dr. Cameron Fisher,3,Contract
+130,Dr. Megan Orr,11,Full Time
+131,Dr. Elizabeth Kelley,5,Full Time
+132,Dr. Dustin Jordan,12,Full Time
+133,Dr. Mary Marshall,1,Full Time
+134,Dr. Daniel Kennedy,3,Full Time
+135,Dr. Rebecca Jackson,1,Full Time
+136,Dr. Jose Schultz,12,Contract
+137,Dr. Robert Potter,5,Contract
+138,Dr. Courtney Gonzalez,12,Full Time
+139,Dr. David Alvarez,8,Full Time
+140,Dr. Angel Perry,5,Full Time
+141,Dr. Cheyenne Horton,12,Contract
+142,Dr. David Douglas Jr.,5,Full Time
+143,Dr. Patricia Rodriguez,1,Full Time
+144,Dr. Christopher Rubio,2,Full Time
+145,Dr. Amber Wright,6,Full Time
+146,Dr. Joyce Solis,8,Full Time
+147,Dr. Victoria Larson,2,Full Time
+148,Dr. Stephanie Salazar,6,Full Time
+149,Dr. Kathy Rivas,11,Full Time
+150,Dr. Stephanie Manning,10,Part Time
+151,Dr. David Wright,1,Full Time
+152,Dr. Pamela Boyd,6,Full Time
+153,Dr. Denise Jones,10,Part Time
+154,Dr. Devon Flores,3,Full Time
+155,Dr. Brenda Hall,8,Contract
+156,Dr. Michelle Brown,10,Full Time
+157,Dr. Joshua Perry,4,Part Time
+158,Dr. Jason Stein,1,Full Time
+159,Dr. Melissa Gates,12,Contract
+160,Dr. Jamie Smith,12,Full Time
+161,Dr. Paul Castaneda,7,Full Time
+162,Dr. Jennifer Adkins,3,Full Time
+163,Dr. Lindsey Walker,6,Full Time
+164,Dr. Jeffrey Johnson,6,Full Time
+165,Dr. Michael Powell,10,Part Time
+166,Dr. John Anderson,6,Full Time
+167,Dr. Alyssa Long,5,Full Time
+168,Dr. Alyssa Day,5,Full Time
+169,Dr. Joel Williams,12,Full Time
+170,Dr. Daniel Murphy,4,Part Time
+171,Dr. Jamie Walton,4,Full Time
+172,Dr. Darlene Miller,3,Full Time
+173,Dr. Joshua Cooke,4,Full Time
+174,Dr. Matthew Harrington,2,Full Time
+175,Dr. Nicole Herring,3,Part Time
+176,Dr. Alex Hernandez,3,Full Time
+177,Dr. Michael Elliott,7,Full Time
+178,Dr. Michael Wang,10,On-Call
+179,Dr. Lawrence Adkins,7,Full Time
+180,Dr. Robert Oconnell,12,Full Time
+181,Dr. Alexander Collins,10,Contract
+182,Dr. Tina Sanders,2,Full Time
+183,Dr. Angela Vaughn,6,Part Time
+184,Dr. Ashley Barton,8,Contract
+185,Dr. Lindsay Martinez,1,On-Call
+186,Dr. Dr. Hannah Patterson,7,Full Time
+187,Dr. Jonathan Peterson,5,Full Time
+188,Dr. Samantha Garcia,7,Full Time
+189,Dr. Madison Poole,10,Full Time
+190,Dr. Jessica Gross,5,Full Time
+191,Dr. Debra Morton,12,Full Time
+192,Dr. Karen Graham,1,Full Time
+193,Dr. Debra Christian,4,Full Time
+194,Dr. Angelica Keith,10,Part Time
+195,Dr. John Bishop,5,Full Time
+196,Dr. Allen Rosales,1,Full Time
+197,Dr. Daniel Salinas,5,Full Time
+198,Dr. Spencer Haynes,10,Contract
+199,Dr. Adam Vaughan,4,Full Time
+200,Dr. Nathan Freeman,10,Full Time
+201,Dr. Melissa Brewer,10,Full Time
+202,Dr. Ricky Davis II,8,Full Time
+203,Dr. Elizabeth Perkins,4,Full Time
+204,Dr. Joseph Coleman,7,Contract
+205,Dr. Erin Warner,12,Full Time
+206,Dr. David Martinez,11,Part Time
+207,Dr. Bryan Herrera,12,Full Time
+208,Dr. Cathy Robinson,12,Full Time
+209,Dr. Dr. William Warren,3,Part Time
+210,Dr. Brian Lee,12,Full Time
+211,Dr. Christopher Smith,1,Full Time
+212,Dr. Denise Mccann,11,Full Time
+213,Dr. Melissa Martinez,12,Full Time
+214,Dr. Katherine Salas,2,Full Time
+215,Dr. Julie Alexander,2,Full Time
+216,Dr. Anthony Everett,1,Full Time
+217,Dr. Rodney Morales,10,Full Time
+218,Dr. Mark Brown,2,Full Time
+219,Dr. Justin Torres,7,Full Time
+220,Dr. Bailey Duran DDS,5,Full Time
+221,Dr. Courtney Mills,11,Contract
+222,Dr. Jeremy Dalton,4,Full Time
+223,Dr. Elizabeth Oliver DDS,9,Full Time
+224,Dr. Theresa Clark,5,Part Time
+225,Dr. Matthew Moore,3,On-Call
+226,Dr. Benjamin Smith,4,Full Time
+227,Dr. Kirk Carter,7,Full Time
+228,Dr. Michael Warner,7,Contract
+229,Dr. Michael Bradshaw,5,Full Time
+230,Dr. Lori Guerrero,7,Part Time
+231,Dr. Jessica Stephens,9,Full Time
+232,Dr. Susan Serrano,1,Full Time
+233,Dr. Christopher Parker,4,Part Time
+234,Dr. Laura Roberts,6,Full Time
+235,Dr. Michael Lyons,3,Full Time
+236,Dr. Kathryn Snyder,12,On-Call
+237,Dr. Andrew Reynolds,3,Full Time
+238,Dr. David Davis,7,On-Call
+239,Dr. Sara Johnston,4,Full Time
+240,Dr. Yvonne Chambers,5,Full Time
+241,Dr. Andrew Avila,12,Full Time
+242,Dr. Matthew Moon,11,Full Time
+243,Dr. Kevin Walters,5,Part Time
+244,Dr. Brandon Bailey MD,9,Full Time
+245,Dr. Shannon Rivera,5,Full Time
+246,Dr. Donna Landry,7,On-Call
+247,Dr. Krista Gibson,10,Full Time
+248,Dr. Frank Cordova,7,Full Time
+249,Dr. Jose Travis,11,Full Time
+250,Dr. Kimberly Gutierrez,12,Full Time
+251,Dr. Isaiah Avila,10,Full Time
+252,Dr. Olivia Harris,6,Full Time
+253,Dr. Tanya Kim,8,Full Time
+254,Dr. Barbara Dudley,2,Contract
+255,Dr. Cynthia Moore,2,Full Time
+256,Dr. Kristen Davis,5,Full Time
+257,Dr. Susan Murray MD,8,Full Time
+258,Dr. Kathleen Moran,1,Contract
+259,Dr. Denise Davenport,1,Contract
+260,Dr. Mrs. Kristen Reyes,9,Full Time
+261,Dr. Katie Suarez,4,Full Time
+262,Dr. Desiree Tyler,3,Part Time
+263,Dr. Timothy Romero,6,Part Time
+264,Dr. Diane Evans,10,Contract
+265,Dr. Yvonne Burns,7,Full Time
+266,Dr. Joshua Reed,2,Full Time
+267,Dr. Kimberly Gibson,10,Part Time
+268,Dr. Colin Terry,8,Full Time
+269,Dr. Cynthia Rowe,9,Part Time
+270,Dr. Patrick Thornton,3,Full Time
+271,Dr. Jasmin Alvarado,9,Full Time
+272,Dr. Veronica Simpson,1,Full Time
+273,Dr. Jonathan Lawrence,1,Full Time
+274,Dr. Shelly Alexander,6,Part Time
+275,Dr. Joyce Bowen,5,Full Time
+276,Dr. Matthew Moore,5,On-Call
+277,Dr. Wayne Morgan,5,Full Time
+278,Dr. Marie Christian,3,On-Call
+279,Dr. Shannon James,2,Full Time
+280,Dr. Nathan Malone,1,Full Time
+281,Dr. Amanda Jones,1,Full Time
+282,Dr. Tammie Bright,6,Full Time
+283,Dr. Jessica Garcia,7,Full Time
+284,Dr. Shelia Wallace,12,On-Call
+285,Dr. Stephanie Williams,8,Full Time
+286,Dr. Elaine Brooks,8,Full Time
+287,Dr. Joseph Knight,8,Full Time
+288,Dr. Carolyn Miller,4,Full Time
+289,Dr. Lisa Allen,10,Full Time
+290,Dr. Briana Murray,12,Full Time
+291,Dr. David Smith,9,Full Time
+292,Dr. Stephanie Byrd,11,Full Time
+293,Dr. Jeremy Reed,1,Full Time
+294,Dr. Margaret Coleman,5,Part Time
+295,Dr. Ryan Gonzalez,12,Full Time
+296,Dr. John Young,3,Part Time
+297,Dr. Laura Haney,2,Full Time
+298,Dr. William Barrett,5,Full Time
+299,Dr. Keith Jennings,2,Full Time
+300,Dr. Amber Obrien,2,Full Time
+301,Dr. Tanner Mitchell DDS,5,Full Time
+302,Dr. Heather Fields,1,Part Time
+303,Dr. Megan Le,2,On-Call
+304,Dr. Sara Fuller,1,Full Time
+305,Dr. Maria Parker,10,Full Time
+306,Dr. Kevin Oconnor,6,Part Time
+307,Dr. Edward Burgess,1,Part Time
+308,Dr. Carlos Ryan,2,Full Time
+309,Dr. Kiara Mcintyre,1,Full Time
+310,Dr. Dawn Summers,7,Contract
+311,Dr. Dr. Paul Morgan,1,Full Time
+312,Dr. Victor Taylor,5,On-Call
+313,Dr. Shannon Ramsey,5,Full Time
+314,Dr. Tracy Ballard,5,Contract
+315,Dr. Richard Smith,10,Full Time
+316,Dr. Jordan Chambers,5,Full Time
+317,Dr. Lauren Carson,1,On-Call
+318,Dr. Ashley Hall,4,Full Time
+319,Dr. Stephen Hoffman,1,Part Time
+320,Dr. Connie Brown,2,Full Time
+321,Dr. Susan Turner,8,Full Time
+322,Dr. Charles Shah,10,Full Time
+323,Dr. Johnathan Davis,6,Part Time
+324,Dr. Brandy Chavez,2,Contract
+325,Dr. Natalie Bautista,6,On-Call
+326,Dr. Patrick Moore,11,Full Time
+327,Dr. Brett Burns,7,Part Time
+328,Dr. Trevor Johnson,5,Full Time
+329,Dr. Jeremy Sampson,11,Full Time
+330,Dr. Ariana Jennings,6,Full Time
+331,Dr. Vanessa Howard,2,Full Time
+332,Dr. Colton Martinez,2,Full Time
+333,Dr. Jordan Bates,11,Full Time
+334,Dr. Linda Smith,2,Full Time
+335,Dr. Dana Martinez,6,Full Time
+336,Dr. Andrea Hubbard,12,Full Time
+337,Dr. Daniel Kane,10,Contract
+338,Dr. Charles Lester,5,Part Time
+339,Dr. Scott Thomas,10,Contract
+340,Dr. David Thompson,10,Part Time
+341,Dr. Allison Smith,4,Full Time
+342,Dr. Cynthia Morris,2,Full Time
+343,Dr. Anthony Harmon,2,Full Time
+344,Dr. Nichole Alvarez,11,Full Time
+345,Dr. Kayla Rodriguez,11,Full Time
+346,Dr. Theresa Williams,9,Full Time
+347,Dr. Sharon Boyd,11,Full Time
+348,Dr. Victor Brown,8,Full Time
+349,Dr. James Parks,4,Full Time
+350,Dr. Theodore Jones Jr.,3,Contract
