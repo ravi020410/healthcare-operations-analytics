@@ -220,7 +220,6 @@ To communicate these insights to clinical and executive stakeholders, I built an
 *Discharge efficiency cohorts, 30-day readmission relative risk (3.58x risk multiplier), and triage wait-time distribution.*
 ![Clinical Quality](visuals/powerbi/03_clinical_quality.jpg)
 
-*Detailed modeling rules, DAX formulas, and canvas layout specifications are documented in [`dashboards/powerbi_build_guide.md`](dashboards/powerbi_build_guide.md).*
 
 ---
 
