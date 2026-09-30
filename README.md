@@ -41,16 +41,6 @@ When hospitals face capacity pressure, leadership often makes decisions based on
 
 ---
 
-## Chronological Project Workflow
-
-```text
-[1. Raw Ingestion]   -->  [2. Data Hygiene]      -->  [3. SQL Warehouse]    -->  [4. Machine Learning] -->  [5. Power BI Dashboard]
-47,058 EHR records        Fixed 8 data defects         PostgreSQL 14+            Random Forest              3-Page Executive Suite
-(with real anomalies)     (dedup, clock-sync, etc.)    Star-schema + 10 queries  Readmission Risk (0.642)   DAX + 4K Visual Showcase
-```
-
----
-
 ## Step 1: Data Auditing & Automated Hygiene (Resolving 8 Data Defects)
 
 Real healthcare transactional data is messy. During my exploratory data analysis (`notebooks/01_eda.ipynb`), I audited 47,058 raw admission extracts and uncovered **8 distinct data quality defects**. 
