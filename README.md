@@ -41,17 +41,7 @@ When hospitals face capacity pressure, leadership often makes decisions based on
 
 ---
 
-## Chronological Project Workflow
-
-```text
-[1. Raw Ingestion]   -->  [2. Data Hygiene]      -->  [3. SQL Warehouse]    -->  [4. Machine Learning] -->  [5. Power BI Dashboard]
-47,058 EHR records        Fixed 8 data defects         PostgreSQL 14+            Random Forest              3-Page Executive Suite
-(with real anomalies)     (dedup, clock-sync, etc.)    Star-schema + 10 queries  Readmission Risk (0.642)   DAX + 4K Visual Showcase
-```
-
----
-
-## Step 1: Data Auditing & Automated Hygiene (Resolving 8 Data Defects)
+## 1. Data Auditing & Automated Hygiene (Resolving 8 Data Defects)
 
 Real healthcare transactional data is messy. During my exploratory data analysis (`notebooks/01_eda.ipynb`), I audited 47,058 raw admission extracts and uncovered **8 distinct data quality defects**. 
 
@@ -70,7 +60,7 @@ Before running any SQL queries or training machine learning models, I built an a
 
 ---
 
-## Step 2: Relational Data Warehousing (PostgreSQL 14+)
+## 2. Relational Data Warehousing (PostgreSQL 14+)
 
 Once the data was cleaned, I designed an isolated `analytics` star schema in PostgreSQL 14+ (`sql/01_schema.sql`). 
 
@@ -147,7 +137,7 @@ erDiagram
 
 ---
 
-## Step 3: SQL Analytical Engine & Business Queries
+## 3. SQL Analytical Engine & Business Queries
 
 In [`sql/03_business_analysis_queries.sql`](sql/03_business_analysis_queries.sql), I wrote 10 modular analytical queries using advanced SQL techniques (CTEs, window functions, statistical Z-score outlier detection, and native binning) to answer operational questions:
 
@@ -166,7 +156,7 @@ In [`sql/03_business_analysis_queries.sql`](sql/03_business_analysis_queries.sql
 
 ---
 
-## Step 4: Key Insights & Discoveries
+## 4. Key Insights & Discoveries
 
 ### 1. The Discharge Efficiency Inflection (3.58x Readmission Relative Risk)
 When I bucketed discharges by preparation quality, the correlation with 30-day readmissions was dramatic:
@@ -197,7 +187,7 @@ Clinical leadership often assumes that reduced weekend staffing causes longer tr
 
 ---
 
-## Step 5: Predictive Readmission Modeling (Machine Learning)
+## 5. Predictive Readmission Modeling (Machine Learning)
 
 In `notebooks/05_business_insights.ipynb`, I trained a Random Forest classification model (`ColumnTransformer` + `RandomForestClassifier`) to predict 30-day readmission risk at the point of discharge:
 
@@ -214,7 +204,7 @@ In `notebooks/05_business_insights.ipynb`, I trained a Random Forest classificat
 
 ---
 
-## Step 6: Power BI Executive Dashboard Suite
+## 6. Power BI Executive Dashboard Suite
 
 To communicate these insights to clinical and executive stakeholders, I built an interactive, 3-page Power BI report (`dashboards/healthcare_operations_analytics.pbix`) using clean star-schema relationships and custom DAX measures (`dashboards/measures.dax`):
 
@@ -230,7 +220,6 @@ To communicate these insights to clinical and executive stakeholders, I built an
 *Discharge efficiency cohorts, 30-day readmission relative risk (3.58x risk multiplier), and triage wait-time distribution.*
 ![Clinical Quality](visuals/powerbi/03_clinical_quality.jpg)
 
-*Detailed modeling rules, DAX formulas, and canvas layout specifications are documented in [`dashboards/powerbi_build_guide.md`](dashboards/powerbi_build_guide.md).*
 
 ---
 
