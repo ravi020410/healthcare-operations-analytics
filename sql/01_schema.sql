@@ -1,8 +1,3 @@
--- Healthcare Operations Analytics — PostgreSQL Enterprise Schema
--- PostgreSQL 14+ (Star-Schema Architecture)
--- Admissions serves as the central fact table, joined to dimensions (patients, doctors,
--- departments) and secondary facts (billing, treatments, satisfaction_surveys).
--- Primary and foreign key constraints enforce referential integrity across all entities.
 
 CREATE SCHEMA IF NOT EXISTS analytics;
 SET search_path TO analytics;
