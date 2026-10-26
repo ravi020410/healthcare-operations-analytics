@@ -1,7 +1,4 @@
-# Hospital Operations & Clinical Analytics - Analyst Report
-**Analyst:** Ravikant Yadav  
-**Timeframe Analyzed:** January 2023 - December 2025 (3 Years)  
-**Dataset Scope:** 46,500 validated inpatient admissions across 10 hospital units  
+# Hospital Operations & Clinical Analytics
 
 ---
 
@@ -124,7 +121,7 @@ In `notebooks/05_business_insights.ipynb`, I trained a Random Forest model to fl
 
 If I were presenting these findings to the hospital's Chief Medical Officer and Chief Operating Officer, here are the 4 recommendations I would give them:
 
-1. **Gate Low-Efficiency Discharges:** Don't let patients with a low discharge score (0–40) leave without a mandatory clinical checklist (medication reconciliation, caregiver education, scheduled primary care visit). Cutting rushed discharges could significantly lower the 27.7% readmission spike.
+1. **Gate Low-Efficiency Discharges:** Don't let patients with a low discharge score (0-40) leave without a mandatory clinical checklist (medication reconciliation, caregiver education, scheduled primary care visit). Cutting rushed discharges could significantly lower the 27.7% readmission spike.
 2. **Reallocate 4–6 Beds to Oncology & ICU:** Shift unused licensed beds out of Cardiology (60.5% occupancy) into Oncology (101% occupancy) to eliminate hallway overflow beds.
 3. **Don't Waste Budget on Weekend Triage Shifts:** Triage waits are practically identical on weekends (24.3 min vs 24.1 min). Focus triage staffing instead on seasonal respiratory spikes in December through February.
 4. **Upgrade Cost Accounting for Phase 2:** To make the financial model truly useful for budgeting, connect actual departmental nursing hours and supply costs to each unit rather than relying on uniform margin estimates.
