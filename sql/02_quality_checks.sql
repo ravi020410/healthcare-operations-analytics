@@ -1,7 +1,3 @@
--- Data Quality Checks
--- Run against the raw load before the cleaning step, to document exactly
--- what was wrong with the source extract and how it was resolved.
-
 -- 1. Duplicate admission rows (system double-entry bug)
 SELECT patient_id, doctor_id, department_id, admission_date, admission_type, COUNT(*) AS occurrences
 FROM admissions_raw
